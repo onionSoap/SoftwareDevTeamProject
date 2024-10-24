@@ -1,0 +1,52 @@
+﻿1. Team Number
+014 - 4
+2. Team name
+The CLEDS
+3. Team Members
+List the First & Last name of team members, their GitHub usernames and their email addresses.
+Sofia Poulsen sopo6073@colorado.edu onionSoap
+Emily Smith emsm2434@colorado.edu emsm2434
+Carter Edwards caed6150@colorado.edu CarterEdwards60
+Leo Zhu  lezh5376@colorado.edu zeolhu
+Dorjee Zhang dozh9458@colorado.edu dorjeezzz
+4. Application Name
+Software_Dev_Adventure
+5. Application Description
+A short (2-3 paragraphs) overview description of the application. Provide enough information to explain what functionality and value your product will provide to users of your application. This should help you to define the scope of your project.
+We are creating a point-and-click adventure game within the browser. It will be an entertaining puzzle, and likely a demo for a larger game. In this game, you will be looking at static screens and clicking on different objects on the screen to either change rooms, collect items, or read clues to help you solve puzzles.
+Each puzzle will have a percentage working towards fully solving it. Once at 100%, the game is done. Certain puzzles require items to complete. Items may be available from the start or may be locked behind other puzzles. Puzzles on one page can unlock certain actions or items on other pages. The goal of the game is to complete all puzzles. There will be a leaderboard tracking who completed all puzzles the quickest. Progress is only saved for those who have accounts and is stored in a database, accessed upon login. 
+
+
+6. Vision Statement
+We will create an interesting, interactive experience for likers and lovers of point-and-click adventures, showing off some useful tools we’ve learned throughout the semester along the way. 
+7. Version Control
+info
+You are required to create a public GitHub repository and add all the members of the team to it. Share the link to this repository in this document.
+This repository should have the following folders:
+* TeamMeetingLogs - The minutes of the meeting with your TA every week will be recorded in a file here. You will be updating the same file every week with the latest updates. Points to include in the minutes would be:
+   * Decisions made
+   * Alternative actions/options discussed
+   * Follow-up items, including agreed-on roles and responsibilities
+* MilestoneSubmissions - All course-related documents, including this one, will be stored in this folder.
+* ProjectSourceCode - The source code and all relevant project documentation for the application will be stored in this folder.
+* ReadMe.md - Refer to the project guide for more information on this.
+   * For a detailed view of your repository, refer to the project guide
+* .gitignore - Please remember to create a .gitignore file in your "ProjectSourceCode" folder in the repository
+8. Development Methodology
+Since this project is scheduled for 4 weeks, we encourage you to use an Agile Methodology. You can also use a hybrid set of practices from different methodologies. For example, you can use Scrum meetings and Kanban boards to track the progress of your project. The important thing is to have a plan and stick to it.
+9. Communication Plan
+We will be communicating in Discord. 
+10. Meeting Plan
+* Team Meeting: Identify the day(s) and time(s), mode, and location your team has agreed upon for regular meetings. “Modality” refers to how you are meeting (face-to-face), group video chat (like Zoom, Google Meet), etc.
+* When available - Discord
+* Weekly meeting with TA: You will also mention the meeting day, time and location (physical or online) for the weekly meeting with your TA here.
+   * Please refer to these instructions for expectations in your weekly meeting with your TAs. Do read the entire section carefully.
+We will be meeting with the TA 
+
+
+11. Use Case Diagram
+Create a high-level Use Case Diagram for your application. Your diagram must show at least 6 key features of your application.
+This activity should help you identify the end users of the application and the ways they would interact with the system. You can reference the examples covered in class. This will also help you scope out the features of your application. You can refer to this page for more information on how to create a Use Case Diagram.
+12. Wireframes
+You will create wireframes for each page of the application.
+Wireframes are low-fidelity visual representations of the user interface of your application. They are used to plan the layout of the application and to communicate the flow of the application to the team. You can use any tool of your choice to create the wireframes. Hand sketched wireframes are also acceptable. You can refer to this for more information on why and how to create wireframes.
