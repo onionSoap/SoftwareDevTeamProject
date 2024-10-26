@@ -1,0 +1,19 @@
+{
+    "name": "node",
+    "main": "index.js",
+    "dependencies": {
+        "express": "^4.6.1",
+        "pg-promise": "^10.11.1",
+        "dotenv": "^16.0.3",
+        "body-parser": "1.20.0",
+        "nodemon": "2.0.20"
+    },
+    "scripts": {
+        "prestart": "npm install",
+        "start": "nodemon ./part_a/index.js",
+        "prestart-server-part-b-postman": "npm install",
+        "prestart-server-part-b-endpoints": "npm install",
+        "start-server-part-b-postman": "nodemon ./part_b_postman/index.js",
+        "start-server-part-b-endpoints": "nodemon ./part_b_endpoints/index.js"
+    }
+}
