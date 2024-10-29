@@ -2,18 +2,71 @@
 <html lang="en">
   <head>
     <title>Testing HTML Canvas</title>
+    <style>
+      .center {
+          position:absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+  
+    </style>
+
   </head>
 
   <body>
-    <canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;">
+    <?xml version="1.0" ?>
+    
+    <canvas class="center" id="myCanvas" width="500" height="600" style="border:1px solid #000000;">
     </canvas> 
 
     <script>
-        var c = document.getElementById("myCanvas");
-        var ctx = c.getContext("2d");
-        ctx.moveTo(0, 0);
-        ctx.lineTo(200, 100);
-        ctx.stroke();
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+
+        var tree_showing = true
+        var tree_path = new Path2D("M 31,2 V 4.1320312 L 29.555,3.1679688 28.445,4.8320312 30.197031,6 28.445,7.1679688 29.555,8.8320312 31,7.8679688 V 10 h 1 1 V 7.8679688 L 34.445,8.8320312 35.555,7.1679688 33.802969,6 35.555,4.8320312 34.445,3.1679688 33,4.1320312 V 2 Z m 1,8 -8.307969,13 h 4.153907 l -6.922969,9 h 4.154062 l -6.922968,10 h 4.153906 L 14,54 h 15 v 2 4 h -5 v 2 H 40 V 60 H 35 V 54 H 50 L 41.692031,42 h 4.153906 L 38.922969,32 h 4.154062 l -6.922968,-9 h 4.153906 z")
+        ctx.fillStyle = "black";
+        ctx.fill(tree_path);
+
+        var tree_img = new Image(5, 5);
+        tree_img.src = "https://www.svgrepo.com/show/422269/christmas-decoration-pine.svg";
+        ctx.drawImage(tree_img, 0, 0, 64, 64);
+
+        canvas.addEventListener('click', function(event) {
+          const isPointInPath = ctx.isPointInPath(tree_path, event.offsetX, event.offsetY);
+          if (isPointInPath ) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fill(tree_path);
+            if (!tree_showing){
+              tree_showing = true
+              ctx.drawImage(tree_img, 0, 0, 64, 64);
+            } else {
+              tree_showing = false
+            }
+          }
+        });
+
+        // // Listen for mouse moves
+        // canvas.addEventListener("mousemove", (event) => {
+        //   // Check whether point is inside circle
+        //   const isPointInPath = ctx.isPointInPath(circle, event.offsetX, event.offsetY);
+        //   ctx.fillStyle = isPointInPath ? "green" : "red";
+
+        //   // Draw circle
+        //   ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //   ctx.fill(circle);
+        // });
+
+        
+        //https://www.youtube.com/watch?v=xbdJf9MRL7A&list=PLN0tvDAN1yvSNbkHAwPzJ5O4pP_e2vyme&index=8&ab_channel=BananaCoding
+    
+        //https://www.w3schools.com/graphics/canvas_intro.asp
+
+        //https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/isPointInPath
+
+        //https://www.svgrepo.com/svg/422269/christmas-decoration-pine
+    
     </script> 
     
   </body>
