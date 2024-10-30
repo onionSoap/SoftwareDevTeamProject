@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const message = 'This is a default endpoint!';
 app.get('/', (req, res) => {
-    res.sendFile(__dirname+'/pages/test.html');
+    res.sendFile(__dirname+'/pages/svgtest.html');
 });
 
 app.listen(PORT, function (err) {
