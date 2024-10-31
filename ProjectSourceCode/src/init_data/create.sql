@@ -14,7 +14,7 @@ CREATE TABLE puzzles (
 CREATE TABLE users_puzzles (
     user_id FOREIGN KEY (user_id) REFERENCES users(user_id),
     puzzle_id FOREIGN KEY (puzzle_id) REFERENCES puzzles(puzzle_id),
-    is_solved BOOL DEFAUL '0',
+    is_solved BOOL DEFAULT '0',
     PRIMARY KEY (user_id, puzzle_id)
 );
 
