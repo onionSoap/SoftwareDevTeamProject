@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id SERIAL NOT NULL PRIMARY KEY,
     username VARCHAR(30) NOT NULL,
     password VARCHAR(30) NOT NULL,
     timer TIME DEFAULT '00:00:00',
@@ -7,7 +7,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE puzzles (
-    puzzle_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    puzzle_id SERIAL NOT NULL PRIMARY KEY,
     value TINYINT NOT NULL
 );
 
@@ -19,6 +19,6 @@ CREATE TABLE users_puzzles (
 );
 
 CREATE TABLE items (
-    item_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    item_id SERIAL PRIMARY KEY,
     status VARCHAR(10) CHECK(status IN('unknown','found','active','disabled'))
 );
