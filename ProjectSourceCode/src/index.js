@@ -13,7 +13,10 @@ const session = require('express-session');
 const hbs = handlebars.create({
   extname: 'hbs',
   layoutsDir: __dirname + '/views/layouts',
-  partialsDir: __dirname + '/views/partials',
+  partialsDir:[
+    __dirname + '/views/partials',
+    __dirname + '/views/partials/svg_components'
+  ]
 });
 
 // Register `hbs` as our view engine using its bound `engine()` function.
