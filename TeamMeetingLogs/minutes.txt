@@ -1,0 +1,24 @@
+Meeting 11/3/2024 @ 4pm
+Attendees: Emily, Sofia, Leo
+Excused: Dorjee
+Did not attend: Carter
+
+What has been completed?
+Sofia: Worked on rendering the game, made the structure, separated out the function and the structure so that it's easier to expand, setup partials with the index.js for the login
+Emily: Added messages partial, added get/post for login
+Leo: Written the structure for the login page
+
+What is still in progress?
+Sofia: Working on swapping between scenes
+Emily: Going to OHs this week to get postgres set up (or at least started), starting to work on header partial
+Leo: Working on the login page
+
+What will be our deliverables by Tuesday's meeting?
+Sofia: Create an internal variable to test puzzle solving
+Emily: Header partial (not pretty but working probably)
+Leo: Login page
+
+Future thoughts:
+Sofia: Look into body parsers
+Emily: I'm going to make the header beautiful <3
+Leo: Plan out the different puzzles for Sofia to implement
