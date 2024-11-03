@@ -63,12 +63,16 @@ app.use(
 //   });
 
 
+app.get('/game', (req, res) => {
+  res.render('pages/page1'); //this will call the /anotherRoute route in the API
+});
+
 app.get('/', (req, res) => {
-    res.redirect('/login'); //this will call the /anotherRoute route in the API
-  });
+  res.redirect('/login'); //this will call the /anotherRoute route in the API
+});
   
 app.get('/login', (req, res) => {
-res.render('pages/login')
+  res.render('pages/login');
 });
 
 app.post('/login', async (req, res) => {
