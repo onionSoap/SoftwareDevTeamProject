@@ -2,8 +2,31 @@
 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
     {{>svgsettings}}
     {{!-- Order you render these in doesn't matter, only affects z axis/layering!--}}
-    {{> tree}}
+
+    {{> tree fancy_tree=true}}
     {{> present}}
+
+    <script>
+        document.getElementById('regular_tree').style.visibility = "hidden";
+        document.getElementById('fancy_present').style.visibility = "hidden";
+
+        document.getElementById('fancy_tree').addEventListener("click", function(e) {toggle2(this.id, 'fancy_tree', 'regular_tree');}, false);
+        document.getElementById('regular_tree').addEventListener("click", function(e) {toggle2(this.id, 'fancy_tree', 'regular_tree');}, false);
+
+        document.getElementById('present').addEventListener("click", function(e) {toggle2(this.id, 'present', 'fancy_present');}, false);
+        document.getElementById('fancy_present').addEventListener("click", function(e) {toggle2(this.id, 'present', 'fancy_present');}, false);
+        //Can turn the above into a single reusable function if we often toggle things ^ 
+
+        function toggle2(id, toggle1, toggle2){
+            if (id == toggle1){
+                document.getElementById(toggle1).style.visibility  = "hidden";
+                document.getElementById(toggle2).style.visibility  = "visible";
+            } else {
+                document.getElementById(toggle2).style.visibility = "hidden";
+                document.getElementById(toggle1).style.visibility  = "visible";
+            }
+        }
+    </script>
 
     </svg>
 </div>
