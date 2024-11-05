@@ -2,11 +2,17 @@
 
 /* Christmas green background, color of text is white */
 .header {
-    background-color: #2e5d31;
-    color: white;
-    padding: 10px;
-    width: 100%;
-    font-family: 'Mountains of Christmas';
+  height:10vh;
+  background-color: #2e5d31;
+  color: white;
+  padding: 10px;
+  width: 100%;
+  font-family: 'Mountains of Christmas';
+  text-align: center;
+}
+
+.non-header {
+  height:90vh;
 }
 
 .first-tier {
@@ -36,20 +42,20 @@
   font-weight: bolder;
 }
 
-body, html {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #cb4335, #1e8449);
-    color: white;
-    text-align: center;
-  }
+.login {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom, #cb4335, #1e8449);
+  color: white;
+  text-align: center;
+}
 
-  label {
+label {
 font-size: 1.5em; 
 }
 
