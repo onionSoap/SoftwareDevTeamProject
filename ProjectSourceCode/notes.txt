@@ -1,1 +1,2 @@
 10/28/2024 : Emily created the project directories based on the project writeup (may change as project develops)
+10/31/2024 : Emily wrote the CREATE TABLES for the website to function and the INSERT statements for dummy data : NOT TESTED 
