@@ -24,7 +24,8 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
-
+// OHs this should fix my style.css inaccessibility issue
+app.use('/resources', express.static(path.join(__dirname, 'resources')));
 // set Session
 app.use(
   session({
