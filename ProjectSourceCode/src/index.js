@@ -79,22 +79,26 @@ app.get('/login', (req, res) => {
   res.render('pages/login');
 });
 
-app.get('/scoreboard', async (req, res) => {
-  const sqlTopPlayers = `
-    SELECT username, score 
-    FROM players 
-    ORDER BY score DESC 
-    LIMIT 10;
-  `;
-
-  try {
-    const players = await db.any(sqlTopPlayers);
-    res.render('pages/scoreboard', { players });
-  } catch (error) {
-    console.error('Error fetching scoreboard data:', error);
-    res.status(500).send('Error loading scoreboard');
-  }
+app.get('/scoreboard', (req, res) => {
+  res.render('pages/scoreboard')
 });
+
+// app.get('/scoreboard', async (req, res) => {
+//   const sqlTopPlayers = `
+//     SELECT username, score 
+//     FROM players 
+//     ORDER BY score DESC 
+//     LIMIT 10;
+//   `;
+
+//   try {
+//     const players = await db.any(sqlTopPlayers);
+//     res.render('pages/scoreboard', { players });
+//   } catch (error) {
+//     console.error('Error fetching scoreboard data:', error);
+//     res.status(500).send('ERROR');
+//   }
+// });
 
 app.post('/login', async (req, res) => {
     const username = req.body.username

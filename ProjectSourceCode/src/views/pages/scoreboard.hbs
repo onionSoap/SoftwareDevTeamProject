@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scoreboard</title>
+    <link rel="stylesheet" href="/resources/css/style.css">
     <style>
+        /* Background and styling to match the Christmas theme */
         body {
             background: linear-gradient(180deg, #B82E00, #047400);
             color: white;
@@ -17,37 +19,40 @@
         }
 
         .scoreboard-container {
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.6); /* Slightly transparent background */
             padding: 20px;
             border-radius: 8px;
             text-align: center;
             max-width: 400px;
             width: 100%;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .scoreboard-title {
             font-size: 24px;
             margin-bottom: 10px;
+            color: #FFF5F5;
         }
 
         .scoreboard-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 18px;
+            margin-top: 10px;
         }
 
         .scoreboard-table th, .scoreboard-table td {
             padding: 10px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #ddd;
         }
 
         .scoreboard-table th {
             background-color: #006400; /* Dark green */
-            color: white;
+            color: #FFF5F5;
         }
 
         .scoreboard-table tr:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.1); /* Light transparent row coloring */
         }
 
         .scoreboard-table td {
@@ -68,13 +73,32 @@
             </tr>
         </thead>
         <tbody>
-            {{#each players}}
+            <!-- Dummy Data for Scoreboard with specified usernames and scores -->
             <tr>
-                <td>{{@index+1}}</td>
-                <td>{{this.username}}</td>
-                <td>{{this.score}}</td>
+                <td>1</td>
+                <td>Dorjee</td>
+                <td>1000</td>
             </tr>
-            {{/each}}
+            <tr>
+                <td>2</td>
+                <td>Leo</td>
+                <td>950</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Emily</td>
+                <td>900</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Sophia</td>
+                <td>850</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Carter</td>
+                <td>800</td>
+            </tr>
         </tbody>
     </table>
 </div>
