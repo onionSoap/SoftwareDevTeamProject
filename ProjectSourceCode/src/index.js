@@ -63,8 +63,12 @@ app.use(
 //   });
 
 
-app.get('/game', (req, res) => {
+app.get('/page1', (req, res) => {
   res.render('pages/page1'); //this will call the /anotherRoute route in the API
+});
+
+app.get('/page2', (req, res) => {
+  res.render('pages/page2'); //this will call the /anotherRoute route in the API
 });
 
 app.get('/', (req, res) => {
