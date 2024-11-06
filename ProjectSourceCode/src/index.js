@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const handlebars = require('express-handlebars');
 const path = require('path');
-const pgp = require('pg-promise')();
+const pgp = require('pg-promise')(); //library that gives me access to make any database that i have access to normally
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
@@ -18,6 +18,31 @@ const hbs = handlebars.create({
     __dirname + '/views/partials/svg_components'
   ]
 });
+
+// -------------------------------------  DB CONFIG AND CONNECT   ---------------------------------------
+//TODO: Use this later for setting up db!
+//accessed by either: hosted by another entity (need to have the url to access that)
+                    //hosted outself, create two docker containers that runs the application and the other the database
+const dbConfig = {
+  host: 'db',
+  port: 5432,
+  database: process.env.POSTGRES_DB,
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+};
+const db = pgp(dbConfig);
+
+
+//// db test
+db.connect()
+  .then(obj => {
+    // Can check the server version here (pg-promise v10.1.0+):
+    console.log('Database connection successful');
+    obj.done(); // success, release the connection;
+  })
+  .catch(error => {
+    console.log('ERROR', error.message || error);
+  });
 
 // Register `hbs` as our view engine using its bound `engine()` function.
 app.engine('hbs', hbs.engine);
@@ -39,29 +64,6 @@ app.use(
     extended: true,
   })
 );
-
-// -------------------------------------  DB CONFIG AND CONNECT   ---------------------------------------
-//TODO: Use this later for setting up db!
-// const dbConfig = {
-//   host: 'db',
-//   port: 5432,
-//   database: process.env.POSTGRES_DB,
-//   user: process.env.POSTGRES_USER,
-//   password: process.env.POSTGRES_PASSWORD,
-// };
-// const db = pgp(dbConfig);
-
-
-// //// db test
-// db.connect()
-//   .then(obj => {
-//     // Can check the server version here (pg-promise v10.1.0+):
-//     console.log('Database connection successful');
-//     obj.done(); // success, release the connection;
-//   })
-//   .catch(error => {
-//     console.log('ERROR', error.message || error);
-//   });
 
 
 app.get('/page1', (req, res) => {
