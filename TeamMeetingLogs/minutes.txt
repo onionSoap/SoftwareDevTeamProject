@@ -24,7 +24,7 @@ Emily: I'm going to make the header beautiful <3
 Leo: Plan out the different puzzles for Sofia to implement
 
 Meeting 11/5/2024 @4:30pm
-Attendees: Emily, Sofia, Leo, Dorjee, Carter?
+Attendees: Emily, Sofia, Leo, Dorjee, Carter
 
 Are there any release notes?
 More formal release notes for following weeks. "This person did this on this branch etc..."
