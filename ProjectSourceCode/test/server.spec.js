@@ -37,7 +37,7 @@ describe('Server!', () => {
 // Explanation: The testcase will call the /add_user API with the following input
 // and expects the API to return a status of 200 along with the "Success" message.
 
-describe('Testing Add User API', () => {
+describe('Testing Add User Account', () => {
   it('positive : /add_user', done => {
     chai
       .request(server)
@@ -53,7 +53,7 @@ describe('Testing Add User API', () => {
 
 //We are checking POST /add_user API by passing the user info in in incorrect manner (name cannot be an integer). This test case should pass and return a status 400 along with a "Invalid input" message.
 
-describe('Testing Add User API', () => {
+describe('Testing Add User Account', () => {
   it('positive : /add_user', done => {
     // Refer above for the positive testcase implementation
   });
