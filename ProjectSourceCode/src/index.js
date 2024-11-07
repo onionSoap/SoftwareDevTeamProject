@@ -18,7 +18,6 @@ const hbs = handlebars.create({
     __dirname + '/views/partials/svg_components'
   ]
 });
-
 // -------------------------------------  DB CONFIG AND CONNECT   ---------------------------------------
 //TODO: Use this later for setting up db!
 //accessed by either: hosted by another entity (need to have the url to access that)
@@ -64,6 +63,10 @@ app.use(
     extended: true,
   })
 );
+
+app.get('/welcome', (req, res) => {
+  res.json({status: 'success', message: 'Welcome!'});
+});
 
 
 app.get('/page1', (req, res) => {
@@ -116,5 +119,5 @@ app.post('/login', async (req, res) => {
     }
   })
 
-app.listen(3000);
+module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
