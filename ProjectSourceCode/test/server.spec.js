@@ -1,6 +1,6 @@
 // ********************** Initialize server **********************************
 
-const server = require('../src/index.js'); //TODO: Make sure the path to your index.js is correctly added
+const server = require('../src/index.js'); //DONE: Make sure the path to your index.js is correctly added
 
 // ********************** Import Libraries ***********************************
 
@@ -65,7 +65,7 @@ describe('Testing Add User Account', () => {
   // Result: This test case should pass and return a status 400 along with a "Invalid input" message.
   // Explanation: The testcase will call the /add_user API with the following invalid inputs
   // and expects the API to return a status of 400 along with the "Invalid input" message.
-  it('Negative : /add_user. Checking invalid name', done => {
+  it('Negative : /register. Checking invalid name', done => {
     chai
       .request(server)
       .post('/register')
