@@ -119,5 +119,34 @@ app.post('/login', async (req, res) => {
     }
   })
 
+//register
+app.get('/register', (req, res) => {
+  res.render('pages/register');
+});
+
+//from lab 8
+app.post('/register', async (req, res) => {
+  //hash the password using bcrypt library
+  const hash = await bcrypt.hash(req.body.password, 10);
+
+  // DONE: Insert username and hashed password into the 'users' table
+  const username = req.body.username
+  //the rest of the information in the users table is auto generated
+  const sqlRegister = "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *;"
+  db.any(sqlRegister, [username, hash])
+  /*
+    Redirect to GET /login route page after data has been inserted successfully.
+    If the insert fails, redirect to GET /register route.
+  */
+  .then(data => {
+    // console.log("Registered user with: ", data)
+    //res.redirect('/login', {message:"Error discovering data.", error:true})
+    res.redirect('/login', {message:"Registration Successful!", error:false})
+  })
+  .catch(function (err) {
+    res.redirect('/register', {message:"Registration Error!", error:true})
+  });
+});
+
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
