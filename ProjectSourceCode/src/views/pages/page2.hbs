@@ -1,27 +1,19 @@
-
 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-    {{>svgsettings}}
-    {{!-- Order you render these in doesn't matter, only affects z axis/layering!--}}
 
-    {{> lock}}
-    {{> key}}
+    {{> svgsettings}}
+    {{> scene2 }}
+
+    </svg>
 
     <script>
-        var have_key = false;
+        function hide(id){
+            document.getElementById(id).style.visibility  = "hidden";
+        }
 
-        document.getElementById('lock_open').style.visibility = "hidden";
-        document.getElementById('lock_closed').style.visibility = "visible";
-
-        document.getElementById('key').style.visibility = "visible";
-
-        document.getElementById('key').addEventListener("click", function(e) {
-            have_key = true; 
-            this.style.visibility = "hidden";
-            document.getElementById('lock_open').style.visibility = "visible";
-            document.getElementById('lock_closed').style.visibility = "hidden";
-        }, false);
+        function show(id){
+            document.getElementById(id).style.visibility  = "visible";
+        }
         
     </script>
 
-    </svg>
 </div>

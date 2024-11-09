@@ -16,12 +16,12 @@ services:
     env_file: .env
     environment:
       - NODE_ENV=development
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     ports:
       - '3000:3000'
     volumes:
       - ./:/repository
-    command: 'npm run testandrun'
+    command: 'npm run start'
 volumes:
   group-project:

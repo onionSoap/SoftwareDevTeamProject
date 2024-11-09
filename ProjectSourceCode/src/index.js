@@ -81,6 +81,11 @@ app.get('/page3', (req, res) => {
   res.render('pages/page3'); //this will call the /anotherRoute route in the API
 });
 
+app.get('/page4', (req, res) => {
+  res.render('pages/page4'); //this will call the /anotherRoute route in the API
+});
+
+
 app.get('/', (req, res) => {
   res.redirect('/login'); //this will call the /anotherRoute route in the API
 });
