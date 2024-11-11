@@ -4,8 +4,10 @@ const app = express();
 const handlebars = require('express-handlebars');
 const path = require('path');
 const pgp = require('pg-promise')(); //library that gives me access to make any database that i have access to normally
+const bcrypt = require('bcryptjs'); //  To hash passwords
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const { getBuiltinModule } = require('process');
 
 // -------------------------------------  APP CONFIG   ----------------------------------------------
 
@@ -77,6 +79,33 @@ app.get('/page2', (req, res) => {
   res.render('pages/page2'); //this will call the /anotherRoute route in the API
 });
 
+app.post('/update_item_status', async (req, res) => {
+  const {item_id, new_status} = req.body;
+  //try to update the item status 
+  try{
+    const sql_item_update = 'UPDATE items SET status = $1 WHERE item_id = $2 RETURNING *';
+    //call update with db.one and the new_status and item_id that we want to update
+    db.one(sql_item_update, [new_status, item_id])
+    //do we need the data? just put it because I always do.
+    //also, don't reload the page bc tehre's no need (I think? We dont' want to have to refresh the page everytime we click an item)
+    .then(data => {
+      res.status(200).send('Item status updated successfully!');
+      console.log('Item_id: ', item_id, " and new_status: ", new_status);
+    })
+    //reload the page with the error message pop-up
+    .catch(function (err) {
+      res.status(400);
+      res.redirect('/page2', {message:"Item Status Update Error!"});
+    });
+  }
+  //error if unable to
+  catch (error){
+    console.error('Error updating item status: ', error);
+    res.status(400).send({error: 'Failed to update item status.'});
+  }
+})
+
+
 app.get('/page3', (req, res) => {
   res.render('pages/page3'); //this will call the /anotherRoute route in the API
 });
@@ -134,10 +163,12 @@ app.post('/register', async (req, res) => {
   const hash = await bcrypt.hash(req.body.password, 10);
 
   // DONE: Insert username and hashed password into the 'users' table
-  const username = req.body.username
+  const username = req.body.username;
+  console.log(username, password, hash);
   //the rest of the information in the users table is auto generated
-  const sqlRegister = "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *;"
-  db.any(sqlRegister, [username, hash])
+  const sqlRegister = "INSERT INTO users (username, password) VALUES ($1, $2);" ;//removed returning *
+  
+  db.none(sqlRegister, [username, hash]) //changed any to none
   /*
     Redirect to GET /login route page after data has been inserted successfully.
     If the insert fails, redirect to GET /register route.
@@ -145,10 +176,13 @@ app.post('/register', async (req, res) => {
   .then(data => {
     // console.log("Registered user with: ", data)
     //res.redirect('/login', {message:"Error discovering data.", error:true})
-    res.redirect('/login', {message:"Registration Successful!", error:false})
+    res.status(200);
+    res.redirect('/login', {message:"Registration Successful!"});
+    // res.redirect('/login');
   })
   .catch(function (err) {
-    res.redirect('/register', {message:"Registration Error!", error:true})
+    res.status(400);
+    res.redirect('/register', {message:"Registration Error!"});
   });
 });
 
