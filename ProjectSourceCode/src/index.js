@@ -70,6 +70,101 @@ app.get('/welcome', (req, res) => {
   res.json({status: 'success', message: 'Welcome!'});
 });
 
+app.get('/', (req, res) => {
+  res.redirect('/login'); //this will call the /anotherRoute route in the API
+});
+  
+app.get('/login', (req, res) => {
+  res.render('pages/login');
+});
+
+app.post('/login', async (req, res) => {
+    // console.log('login post accessed')
+    const username = req.body.username
+    const password = req.body.password
+    const hash = await bcrypt.hash(password, 10);
+    // console.log("Hashed password:", hash)
+    const sqlUsername = "SELECT * FROM users WHERE username = $1;"
+    
+    try{
+      //async + await make it so that I don't need to do .then(data etc..) which makes the code cleaner and work more efficiently. 
+      const user = await db.one(sqlUsername, [username])
+      const match = await bcrypt.compare(password, user.password)
+  
+      //looks like there's a space for some reason? Why tho...?
+      // console.log("Username is:", username, ", Other username is:", user.username);
+      // console.log("Password is: ", password, ", Other password is: ", user.password)
+      // console.log("Matched as:", match);
+      // rest is mine from earlier
+      if(match){
+        // if (user.password == password && user.username == username){
+        // console.log("if statement")
+        req.session.user = user;
+        req.session.save();
+        res.redirect('/page1')
+      }
+  
+      else{
+        // console.log("else statement")
+        // If the password is incorrect, render the login page and send a message to the user stating "Incorrect username or password."
+        res.render('pages/login', {message:"Incorrect username or password.", error:true})
+        // res.render('/login')
+      }
+    }
+    catch{
+      console.log("User doesn't exist! Try registering.")
+      res.redirect('/register')
+    }
+  })
+
+//register
+app.get('/register', (req, res) => {
+  res.render('pages/register');
+});
+
+//from lab 8
+app.post('/register', async (req, res) => {
+  //hash the password using bcrypt library
+  const hash = await bcrypt.hash(req.body.password, 10);
+
+  // DONE: Insert username and hashed password into the 'users' table
+  const username = req.body.username;
+  const password = req.body.password;
+  // console.log(username, password, hash);
+  //the rest of the information in the users table is auto generated
+  const sqlRegister = "INSERT INTO users (username, password) VALUES ($1, $2);" ;//removed returning *
+  
+  db.none(sqlRegister, [username, hash]) //changed any to none
+  /*
+    Redirect to GET /login route page after data has been inserted successfully.
+    If the insert fails, redirect to GET /register route.
+  */
+  .then(data => {
+    // console.log("Registered user with: ", data)
+    //res.redirect('/login', {message:"Error discovering data.", error:true})
+    // res.json({status: 'success'});     
+    res.status(200).render('pages/register', {message: "Registration Successful!"});
+    // res.redirect('/login', {message:"Registration Successful!"});
+    // res.redirect('/login');
+  })
+  .catch(function (err) {
+    res.status(400).render('pages/register', {message: "Registration Error!", error: true});
+    // res.redirect('/register', {message:"Registration Error!", error: true});
+  });
+});
+
+// Authentication Middleware.
+const auth = (req, res, next) => {
+  // console.log(req.session)
+  if (!req.session.user) {
+    // Default to login page.
+    return res.redirect('/login');
+  }
+  next();
+};
+
+// Authentication Required
+app.use(auth);
 
 app.get('/page1', (req, res) => {
   res.render('pages/page1'); //this will call the /anotherRoute route in the API
@@ -90,12 +185,12 @@ app.post('/update_item_status', async (req, res) => {
     //also, don't reload the page bc tehre's no need (I think? We dont' want to have to refresh the page everytime we click an item)
     .then(data => {
       res.status(200).send('Item status updated successfully!');
-      console.log('Item_id: ', item_id, " and new_status: ", new_status);
+      // console.log('Item_id: ', item_id, " and new_status: ", new_status);
     })
     //reload the page with the error message pop-up
     .catch(function (err) {
-      res.status(400);
-      res.redirect('/page2', {message:"Item Status Update Error!"});
+      res.status(400).send("Item Status Update Error!");
+      // res.redirect('/page2');
     });
   }
   //error if unable to
@@ -105,105 +200,10 @@ app.post('/update_item_status', async (req, res) => {
   }
 })
 
-
 app.get('/page3', (req, res) => {
   res.render('pages/page3'); //this will call the /anotherRoute route in the API
 });
 
-app.get('/', (req, res) => {
-  res.redirect('/login'); //this will call the /anotherRoute route in the API
-});
-  
-app.get('/login', (req, res) => {
-  res.render('pages/login');
-});
-
-app.post('/login', async (req, res) => {
-    console.log('login post accessed')
-    const username = req.body.username
-    const password = req.body.password
-    const hash = await bcrypt.hash(password, 10);
-    console.log("Hashed password:", hash)
-    const sqlUsername = "SELECT * FROM users WHERE username = $1;"
-    
-    try{
-      //async + await make it so that I don't need to do .then(data etc..) which makes the code cleaner and work more efficiently. 
-      const user = await db.one(sqlUsername, [username])
-      const match = await bcrypt.compare(password, user.password)
-  
-      //looks like there's a space for some reason? Why tho...?
-      console.log("Username is:", username, ", Other username is:", user.username);
-      console.log("Password is: ", password, ", Other password is: ", user.password)
-      console.log("Matched as:", match);
-      // rest is mine from earlier
-      if(match){
-        // if (user.password == password && user.username == username){
-        console.log("if statement")
-        req.session.user = user;
-        req.session.save();
-        res.redirect('/page1')
-      }
-  
-      else{
-        console.log("else statement")
-        // If the password is incorrect, render the login page and send a message to the user stating "Incorrect username or password."
-        res.render('pages/login', {message:"Incorrect username or password.", error:true})
-        // res.render('/login')
-      }
-    }
-    catch{
-      console.log("User doesn't exist! Try registering")
-      res.redirect('/register')
-    }
-  })
-
-//register
-app.get('/register', (req, res) => {
-  res.render('pages/register');
-});
-
-//from lab 8
-app.post('/register', async (req, res) => {
-  //hash the password using bcrypt library
-  const hash = await bcrypt.hash(req.body.password, 10);
-
-  // DONE: Insert username and hashed password into the 'users' table
-  const username = req.body.username;
-  const password = req.body.password;
-  console.log(username, password, hash);
-  //the rest of the information in the users table is auto generated
-  const sqlRegister = "INSERT INTO users (username, password) VALUES ($1, $2);" ;//removed returning *
-  
-  db.none(sqlRegister, [username, hash]) //changed any to none
-  /*
-    Redirect to GET /login route page after data has been inserted successfully.
-    If the insert fails, redirect to GET /register route.
-  */
-  .then(data => {
-    // console.log("Registered user with: ", data)
-    //res.redirect('/login', {message:"Error discovering data.", error:true})
-    res.status(200).render('pages/login', {message: "Registration Successful!"});
-    // res.redirect('/login', {message:"Registration Successful!"});
-    // res.redirect('/login');
-  })
-  .catch(function (err) {
-    res.status(400).render('page/register', {message: "Registration Error!", error: true});
-    // res.redirect('/register', {message:"Registration Error!", error: true});
-  });
-});
-
-// Authentication Middleware.
-const auth = (req, res, next) => {
-  // console.log(req.session)
-  if (!req.session.user) {
-    // Default to login page.
-    return res.redirect('/login');
-  }
-  next();
-};
-
-// Authentication Required
-app.use(auth);
 
 app.get('/logout', (req, res) => {
   req.session.destroy()
