@@ -119,8 +119,11 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
+    console.log('login post accessed')
     const username = req.body.username
     const password = req.body.password
+    const hash = await bcrypt.hash(password, 10);
+    console.log("Hashed password:", hash)
     const sqlUsername = "SELECT * FROM users WHERE username = $1;"
     
     try{
@@ -128,19 +131,21 @@ app.post('/login', async (req, res) => {
       const user = await db.one(sqlUsername, [username])
       const match = await bcrypt.compare(password, user.password)
   
-  
-      // console.log("User is:", user);
-      // console.log("Matched as:", match);
+      //looks like there's a space for some reason? Why tho...?
+      console.log("Username is:", username, ", Other username is:", user.username);
+      console.log("Password is: ", password, ", Other password is: ", user.password)
+      console.log("Matched as:", match);
       // rest is mine from earlier
       if(match){
-        // console.log("if statement")
+        // if (user.password == password && user.username == username){
+        console.log("if statement")
         req.session.user = user;
         req.session.save();
-        res.redirect('/discover')
+        res.redirect('/page1')
       }
   
       else{
-        // console.log("else statement")
+        console.log("else statement")
         // If the password is incorrect, render the login page and send a message to the user stating "Incorrect username or password."
         res.render('pages/login', {message:"Incorrect username or password.", error:true})
         // res.render('/login')
@@ -164,6 +169,7 @@ app.post('/register', async (req, res) => {
 
   // DONE: Insert username and hashed password into the 'users' table
   const username = req.body.username;
+  const password = req.body.password;
   console.log(username, password, hash);
   //the rest of the information in the users table is auto generated
   const sqlRegister = "INSERT INTO users (username, password) VALUES ($1, $2);" ;//removed returning *
@@ -176,14 +182,32 @@ app.post('/register', async (req, res) => {
   .then(data => {
     // console.log("Registered user with: ", data)
     //res.redirect('/login', {message:"Error discovering data.", error:true})
-    res.status(200);
-    res.redirect('/login', {message:"Registration Successful!"});
+    res.status(200).render('pages/login', {message: "Registration Successful!"});
+    // res.redirect('/login', {message:"Registration Successful!"});
     // res.redirect('/login');
   })
   .catch(function (err) {
-    res.status(400);
-    res.redirect('/register', {message:"Registration Error!"});
+    res.status(400).render('page/register', {message: "Registration Error!", error: true});
+    // res.redirect('/register', {message:"Registration Error!", error: true});
   });
+});
+
+// Authentication Middleware.
+const auth = (req, res, next) => {
+  // console.log(req.session)
+  if (!req.session.user) {
+    // Default to login page.
+    return res.redirect('/login');
+  }
+  next();
+};
+
+// Authentication Required
+app.use(auth);
+
+app.get('/logout', (req, res) => {
+  req.session.destroy()
+  res.render('pages/login', {message:"Logged out successfully!", error:false})
 });
 
 module.exports = app.listen(3000);
