@@ -1,0 +1,103 @@
+<div class="inventory">
+    <style>
+        /* Inventory styling */
+        .inventory {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .inventory-row {
+            display: flex;
+            gap: 5px;
+        }
+
+        .item {
+            width: 50px;
+            height: 50px;
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item img {
+            width: 80%;
+            height: 80%;
+        }
+
+        /* States */
+        .item.unknown {
+            background-color: white;
+        }
+
+        .item.found {
+            border: 2px solid black;
+        }
+
+        .item.active {
+            border: 2px solid green; /* Green outline for active item */
+            background-color: #e6fff2; /* Light green background */
+        }
+
+        .item.disabled {
+            background-color: grey;
+            opacity: 0.5; /* Grey overlay with reduced opacity */
+        }
+    </style>
+
+    <!-- All unknown -->
+    <div class="inventory-row">
+        {{#each unknownItems}}
+            <div class="item unknown"></div>
+        {{/each}}
+    </div>
+
+    <!-- Some found -->
+    <div class="inventory-row">
+        {{#each items}}
+            {{#if this.isFound}}
+                <div class="item found">
+                    <img src="{{this.icon}}" alt="Found Item">
+                </div>
+            {{else}}
+                <div class="item unknown"></div>
+            {{/if}}
+        {{/each}}
+    </div>
+
+    <!-- Active item (selected) -->
+    <div class="inventory-row">
+        {{#each items}}
+            {{#if this.isActive}}
+                <div class="item active">
+                    <img src="{{this.icon}}" alt="Active Item">
+                </div>
+            {{else if this.isFound}}
+                <div class="item found">
+                    <img src="{{this.icon}}" alt="Found Item">
+                </div>
+            {{else}}
+                <div class="item unknown"></div>
+            {{/if}}
+        {{/each}}
+    </div>
+
+    <!-- Disabled item -->
+    <div class="inventory-row">
+        {{#each items}}
+            {{#if this.isDisabled}}
+                <div class="item disabled">
+                    <img src="{{this.icon}}" alt="Disabled Item">
+                </div>
+            {{else if this.isFound}}
+                <div class="item found">
+                    <img src="{{this.icon}}" alt="Found Item">
+                </div>
+            {{else}}
+                <div class="item unknown"></div>
+            {{/if}}
+        {{/each}}
+    </div>
+</div>
