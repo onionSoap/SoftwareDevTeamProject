@@ -99,6 +99,7 @@ app.post('/login', async (req, res) => {
       if(match){
         // if (user.password == password && user.username == username){
         // console.log("if statement")
+        delete user.password;
         req.session.user = user;
         req.session.save();
         res.status(200);
@@ -195,15 +196,15 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 app.get('/page1', (req, res) => {
-  res.render('pages/page1'); //this will call the /anotherRoute route in the API
+  res.render('pages/page1', {user: req.session.user}); //this will call the /anotherRoute route in the API
 });
 
 app.get('/page2', (req, res) => {
-  res.render('pages/page2'); //this will call the /anotherRoute route in the API
+  res.render('pages/page2', {user: req.session.user}); //this will call the /anotherRoute route in the API
 });
 
 app.get('/page3', (req, res) => {
-  res.render('pages/page3'); //this will call the /anotherRoute route in the API
+  res.render('pages/page3', {user: req.session.user}); //this will call the /anotherRoute route in the API
 });
 
 
