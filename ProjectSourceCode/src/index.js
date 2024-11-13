@@ -101,6 +101,7 @@ app.post('/login', async (req, res) => {
         // console.log("if statement")
         req.session.user = user;
         req.session.save();
+        res.status(200);
         res.redirect('/page1')
       }
   
@@ -153,6 +154,33 @@ app.post('/register', async (req, res) => {
   });
 });
 
+app.post('/update_item_status', async (req, res) => {
+  const {item_id, new_status} = req.body;
+  // console.log("Req.body in post req: ",req.body);
+  //try to update the item status 
+  try{
+    const sql_item_update = 'UPDATE items SET status = $1 WHERE item_id = $2 RETURNING *';
+    //call update with db.one and the new_status and item_id that we want to update
+    db.one(sql_item_update, [new_status, item_id])
+    //do we need the data? just put it because I always do.
+    //also, don't reload the page bc tehre's no need (I think? We dont' want to have to refresh the page everytime we click an item)
+    .then(data => {
+      res.status(200).send({message:"Item status updated successfully!"});
+      // console.log('Item_id: ', item_id, " and new_status: ", new_status);
+    })
+    //reload the page with the error message pop-up
+    .catch(function (err) {
+      res.status(400).json({message:"Item Status Update Error!"});
+      // res.redirect('/page2');
+    });
+  }
+  //error if unable to
+  catch (error){
+    console.error('Error updating item status: ', error);
+    res.status(400).send({error: 'Failed to update item status.'});
+  }
+})
+
 // Authentication Middleware.
 const auth = (req, res, next) => {
   // console.log(req.session)
@@ -174,32 +202,6 @@ app.get('/page2', (req, res) => {
   res.render('pages/page2'); //this will call the /anotherRoute route in the API
 });
 
-app.post('/update_item_status', async (req, res) => {
-  const {item_id, new_status} = req.body;
-  //try to update the item status 
-  try{
-    const sql_item_update = 'UPDATE items SET status = $1 WHERE item_id = $2 RETURNING *';
-    //call update with db.one and the new_status and item_id that we want to update
-    db.one(sql_item_update, [new_status, item_id])
-    //do we need the data? just put it because I always do.
-    //also, don't reload the page bc tehre's no need (I think? We dont' want to have to refresh the page everytime we click an item)
-    .then(data => {
-      res.status(200).send('Item status updated successfully!');
-      // console.log('Item_id: ', item_id, " and new_status: ", new_status);
-    })
-    //reload the page with the error message pop-up
-    .catch(function (err) {
-      res.status(400).send("Item Status Update Error!");
-      // res.redirect('/page2');
-    });
-  }
-  //error if unable to
-  catch (error){
-    console.error('Error updating item status: ', error);
-    res.status(400).send({error: 'Failed to update item status.'});
-  }
-})
-
 app.get('/page3', (req, res) => {
   res.render('pages/page3'); //this will call the /anotherRoute route in the API
 });
@@ -207,6 +209,7 @@ app.get('/page3', (req, res) => {
 
 app.get('/logout', (req, res) => {
   req.session.destroy()
+  res.status(200);
   res.render('pages/login', {message:"Logged out successfully!", error:false})
 });
 
