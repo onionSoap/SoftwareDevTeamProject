@@ -1,4 +1,3 @@
--- need to make PostgresSQL not mySQL
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(30) NOT NULL UNIQUE,

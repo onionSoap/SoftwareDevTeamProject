@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard</title>
+    <link rel="stylesheet" href="/resources/css/style.css">
+    <style>
+        /* Christmas theme styling */
+        body {
+            background: linear-gradient(180deg, #B82E00, #047400); /* Red to green gradient */
+            color: white;
+            {{!-- display: flex; --}}
+            {{!-- justify-content: center; --}}
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .scoreboard-container {
+            text-align: center;
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .scoreboard-title {
+            font-size: 2.5em;
+            color: #FFF5F5;
+        }
+
+        .scoreboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.2em;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .scoreboard-table th, .scoreboard-table td {
+            padding: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .scoreboard-table th {
+            background-color: #006400; /* Dark green */
+            color: #FFF5F5;
+            font-weight: bold;
+        }
+
+        .scoreboard-table tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.1); /* Light transparent row coloring */
+        }
+
+        .scoreboard-table td {
+            color: #FFF5F5;
+        }
+    </style>
+</head>
+<body>
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%;">
+        <div class="scoreboard-container" style="text-align: center; width: 80%; max-width: 800px; margin: 0 auto; background-color: rgba(0, 0, 0, 0.6); padding: 40px; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);">
+            <h1 class="scoreboard-title" style="font-size: 2.5em; color: #FFF5F5;">Top Players</h1>
+            <table class="scoreboard-table" style="width: 100%; border-collapse: collapse; font-size: 1.2em; margin-top: 20px; text-align: center;">
+                <thead>
+                    <tr>
+                        <th style="background-color: #006400; color: #FFF5F5; padding: 15px; border: 1px solid #ddd;">Rank</th>
+                        <th style="background-color: #006400; color: #FFF5F5; padding: 15px; border: 1px solid #ddd;">Username</th>
+                        <th style="background-color: #006400; color: #FFF5F5; padding: 15px; border: 1px solid #ddd;">Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="color: #FFF5F5;">
+                        <td style="padding: 15px; border: 1px solid #ddd;">1</td>
+                        <td style="padding: 15px; border: 1px solid #ddd;">Dorjee</td>
+                        <td style="padding: 15px; border: 1px solid #ddd;">1:00</td>
+                    </tr>
+                    <tr style="color: #FFF5F5;">
+                        <td style="padding: 15px; border: 1px solid #ddd;">2</td>
+                        <td style="padding: 15px; border: 1px solid #ddd;">Leo</td>
+                        <td style="padding: 15px; border: 1px solid #ddd;">2:45</td>
+                    </tr>
+                    <tr style="color: #FFF5F5;">
+                        <td style="padding: 15px; border: 1px solid #ddd;">3</td>
+                        <td style="padding: 15px; border: 1px solid #ddd;">Emily</td>
+                        <td style="padding: 15px; border: 1px solid #ddd;">3:30</td>
+                    </tr>
+                    <tr style="color: #FFF5F5;">
+                        <td style="padding: 15px; border: 1px solid #ddd;">4</td>
+                        <td style="padding: 15px; border: 1px solid #ddd;">Sophia</td>
+                        <td style="padding: 15px; border: 1px solid #ddd;">4:15</td>
+                    </tr>
+                    <tr style="color: #FFF5F5;">
+                        <td style="padding: 15px; border: 1px solid #ddd;">5</td>
+                        <td style="padding: 15px; border: 1px solid #ddd;">Carter</td>
+                        <td style="padding: 15px; border: 1px solid #ddd;">5:00</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JavaScript for Visibility Toggle -->
+    <script>
+        document.getElementById('regular_tree').style.visibility = "hidden";
+        document.getElementById('fancy_present').style.visibility = "hidden";
+
+        document.getElementById('fancy_tree').addEventListener("click", function(e) {
+            toggle2(this.id, 'fancy_tree', 'regular_tree');
+        }, false);
+        document.getElementById('regular_tree').addEventListener("click", function(e) {
+            toggle2(this.id, 'fancy_tree', 'regular_tree');
+        }, false);
+
+        document.getElementById('present').addEventListener("click", function(e) {
+            toggle2(this.id, 'present', 'fancy_present');
+        }, false);
+        document.getElementById('fancy_present').addEventListener("click", function(e) {
+            toggle2(this.id, 'present', 'fancy_present');
+        }, false);
+
+        function toggle2(id, toggle1, toggle2) {
+            if (id === toggle1) {
+                document.getElementById(toggle1).style.visibility = "hidden";
+                document.getElementById(toggle2).style.visibility = "visible";
+            } else {
+                document.getElementById(toggle2).style.visibility = "hidden";
+                document.getElementById(toggle1).style.visibility = "visible";
+            }
+        }
+    </script>
+</body>
+</html>
