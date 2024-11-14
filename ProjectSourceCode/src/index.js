@@ -182,17 +182,17 @@ app.post('/update_item_status', async (req, res) => {
 })
 
 // Authentication Middleware.
-const auth = (req, res, next) => {
-  // console.log(req.session)
-  if (!req.session.user) {
-    // Default to login page.
-    return res.redirect('/login');
-  }
-  next();
-};
+// const auth = (req, res, next) => {
+//   // console.log(req.session)
+//   if (!req.session.user) {
+//     // Default to login page.
+//     return res.redirect('/login');
+//   }
+//   next();
+// };
 
 // Authentication Required
-app.use(auth);
+//app.use(auth);
 
 app.get('/page1', (req, res) => {
   res.render('pages/page1'); //this will call the /anotherRoute route in the API
