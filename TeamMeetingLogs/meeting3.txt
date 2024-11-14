@@ -1,0 +1,24 @@
+Meeting 11/10/2024 @ 8pm
+Attendees: Emily, Sofia, Dorjee
+Excused:
+Did not attend: Leo, Carter
+
+What has been completed?
+Sofia: Created the scenes based on Leo's writeup suggestions, changed the svgstorage method (simplified)
+Emily: Database is now working, POST request for updating status
+Dorjee: Nothing yet. 
+
+What is still in progress?
+Sofia: Nothing, done for the week. 
+Emily: Tests from lab and get reqeust for item status (talk to someone in OHs about that).
+Dorjee: Fully implement the scoreboard with christmas theme and timer. Reassigned to and going to prioritize inventory creation. 
+
+What will be our deliverables by Tuesday's meeting?
+Sofia: Scenes loaded with things hidden that should be.
+Emily: Have the tests from Lab working and done so that we don't fail. :(
+Dorjee: Plans to have scoreboard and timer by Tuesday and inventory by Friday.
+
+Future thoughts:
+Sofia: Get some basic logic out and work with Dorjee to get it so that if you have the item you can get the thing, etc... And working on scene swapping.
+Emily: Inventory needs to be done by Friday so that we can work on implementing key elements over the weekend / before Tuesday.
+Dorjee: Unsure yet, wanna see how current workload looks on tuesday.
