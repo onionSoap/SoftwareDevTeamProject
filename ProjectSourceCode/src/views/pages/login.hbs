@@ -1,0 +1,30 @@
+{{>message}}
+
+<div class="login">
+  <div class="snowflake" style="left: 25%;">❄</div>
+  <div class="snowflake" style="left: 50%;">❄</div>
+  <div class="snowflake" style="left: 75%;">❄</div>
+  <div class="snowflake" style="left: 60%;">❄</div>
+  <div class="snowflake" style="left: 85%;">❄</div>
+  <div class="snowflake" style="left: 92%;">❄</div>
+  <div class="snowflake" style="left: 10%;">❄</div>
+  <div class="snowflake" style="left: 7%;">❄</div>
+  <div class="snowflake" style="left: 2%;">❄</div>
+  <div class="snowflake" style="left: 18%;">❄</div>
+  <div class="snowflake" style="left: 42%;">❄</div>
+
+  <h1>Login to begin adventuring!</h1>
+  <form action="/login" method="POST">
+    <label for="username">Username</label><br>
+    <input type="text" class="form-control" id="username" name="username" placeholder="Enter your name" required><br>
+    
+    <label for="password">Password</label><br>
+    <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required><br>
+    
+    <button type="submit" class="btn">Login</button>
+  </form>
+  
+  <div class="register-link">
+    New user? <a href="/register">Register here!</a>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+Meeting 4, TA: 
+
+Dorjee worked on the frontend of the scoreboard and a demo of a timer. 
+He also started working on a demo of the inventory hotbar partial, with different colors for statuses.
+Next week, Dorjee wants to work on finishing the hotbar and implementing the items interacting with the game. 
+
+Emily worked on making the registration, login, and logout pages work in the backend. She also created a ‘update_item_status’ post request to save the user’s progress to the database. She also made the four test cases for Lab 11.
+Next week, Emily wants to make the site flow a bit better between login, register, etc. She would also like to have the ‘username’ and ‘progress’ in the header synced up with the database. 
+
+Sofia worked on implementing the images for the final scenes with the correct items hidden. She’d like to work with Dorjee to get items interacting with the game and get two scenes working by next week. 
+
+This week, Leo made the register page. He also made a test case for the login page in recitation. Next week, he’ll be working on level planning, continue working on the test case, and make sure all the buttons work in the register page.
+
+Chloe recommends getting at least single scene working, to show the actual gameplay.
