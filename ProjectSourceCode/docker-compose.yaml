@@ -3,6 +3,7 @@ services:
   #these are containers
   db: #this is for the database
     image: postgres:14
+    env_file: .env
     expose:
       - '5432'
     volumes:
