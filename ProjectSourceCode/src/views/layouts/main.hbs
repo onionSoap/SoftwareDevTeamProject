@@ -1,6 +1,42 @@
 {{>header}}
 
 <div class="non-header">
+
+
+
+    <script>
+
+        // item id :[item id of object to click to activate, [function to call on click]]
+
+        const item_activation_dict={ 
+            "carrot":["snowman",["show(complete_carrot_nose)","show(key)"]], 
+            "key":["lock_closed",["show(lock_open)"]], 
+            "cookie_cutter":["cookie_dough", ["increment_cookie_cutout"]],
+            "uncooked_cookies":["pan", ["increment_cookie_in_pan()"]],
+            "sugar":["dough_bowl",["increment_dough_counter()"]],
+            "butter":["dough_bowl",["increment_dough_counter()"]],
+            "flour":["dough_bowl",["increment_dough_counter()"]],
+            "mistletoe":["dough_bowl",["increment_dough_counter()"]]
+
+        };
+
+        /*TODO: Maybe use eval() for this... SUPER unsafe, LOL
+
+        Make the functions: 
+            -increment_dough_counter()
+            -increment_cookie_in_pan()
+            -increment_cookie_cutout()
+        */
+
+        function hide(id){
+            document.getElementById(id).style.visibility  = "hidden";
+        }
+
+        function show(id){
+            document.getElementById(id).style.visibility  = "visible";
+        }
+        
+    </script>
     {{{body}}}
 </div>
 
