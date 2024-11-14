@@ -8,24 +8,41 @@
 
         // item id :[item id of object to click to activate, [function to call on click]]
 
+        const pickupable_item_ids=["carrot","key","cookie_cutter",
+        "uncooked_cookies","flour","sugar","butter","antlers","mistletoe",
+        "lucky_star"];
         const item_activation_dict={ 
-            "carrot":["snowman",["show(complete_carrot_nose)","show(key)"]], 
-            "key":["lock_closed",["show(lock_open)"]], 
+            "carrot":["snowman",["show('complete_carrot_nose')","show('key')"]], 
+            "key":["lock_closed",["show('lock_open')"]], 
             "cookie_cutter":["cookie_dough", ["increment_cookie_cutout"]],
             "uncooked_cookies":["pan", ["increment_cookie_in_pan()"]],
             "sugar":["dough_bowl",["increment_dough_counter()"]],
             "butter":["dough_bowl",["increment_dough_counter()"]],
             "flour":["dough_bowl",["increment_dough_counter()"]],
-            "mistletoe":["dough_bowl",["increment_dough_counter()"]]
-
+            "antlers":["cauldron",["increment_potion_counter()"]],
+            "mistletoe":["cauldron",["increment_potion_counter()"]],
+            "lucky_star":["cauldron",["increment_potion_counter()"]],
+            "growth_potion":["small_tree",["hide('small_tree')","show('complete_christmas_tree')"]]
         };
 
         /*TODO: Maybe use eval() for this... SUPER unsafe, LOL
 
         Make the functions: 
             -increment_dough_counter()
+                :
+                    -add 1 to the internal counter, once the counter reaches 3 change scene to scene2_2. 
+                    -Once the increment is 1
+                    -change the '0/3' dough_counter_text to reflect counter
             -increment_cookie_in_pan()
+                : 
+
             -increment_cookie_cutout()
+                : 
+
+            -increment_potion_counter() 
+                : 
+                    -add 1 to the internal counter, once the counter reaches 3 show complete_potion (item) and potion_liquid
+                    -change the '0/3' potion_counter_text to reflect counter
         */
 
         function hide(id){
@@ -34,6 +51,11 @@
 
         function show(id){
             document.getElementById(id).style.visibility  = "visible";
+        }
+
+        function pickup(id){
+            hide(id);
+            //TODO: Do something here to 
         }
         
     </script>
