@@ -9,7 +9,7 @@
         var current_active_item = "carrot"; //TODO: When the item is clicked in the inventory, set it to the current_active_item
         const pickupable_item_ids=["carrot","key","cookie_cutter",
         "flour","sugar","butter","antlers",
-        "mistletoe","lucky_star"];
+        "mistletoe","lucky_star","christmas_lights"];
         //"uncooked_cookies","cooked_cookies",
         // "key":["lock_closed",[show('lock_open')]], 
         // item id :[item id of object to click to activate, [function to call on click]]
@@ -24,7 +24,8 @@
             "antlers":["cauldron",["increment_potion_counter()"]],
             "mistletoe":["cauldron",["increment_potion_counter()"]],
             "lucky_star":["cauldron",["increment_potion_counter()"]],
-            "growth_potion":["small_tree",["hide('small_tree')","show('complete_christmas_tree')"]]
+            "growth_potion":["small_tree",["hide('small_tree')","show('complete_christmas_tree')"]],
+            "christmas_lights":["house",["show('complete_christmas_lights')"]]
         };
 
         function hide(id){
@@ -41,39 +42,48 @@
             //TODO: add the item to the inventory
         }
 
-        
-
         function load_items(){
 
-            /*for (item_id in pickupable_item_ids){
-                document.getElementById(item_id).addEventListener("click", (event) => {
-                    pickup(item_id);
-                });
-            }*/
+            for (let i in pickupable_item_ids){
+                var element = null;
+                try{
+                    element = document.getElementById(pickupable_item_ids[i]);
+                }catch(error){}
+                if(element){
+                    console.log(element);
+                    element.addEventListener("click", () => {
+                        console.log(pickupable_item_ids[i]);
+                        pickup(pickupable_item_ids[i]);
+                    });
+                }
 
+            }
+
+            /*
             for (key in item_activation_dict){
-
                 //if not in the current scene:
-                item = null;
+                var item = null;
                 try{
                     item = document.getElementById(item_activation_dict[key][0])
                 }catch(error){}
 
                 if(item){
-                    var curr_key = key;
+                    console.log(item);
                     item.addEventListener("click", (event) => {
+                        var curr_key = key;
+                        console.log(curr_key);
                         if (current_active_item == curr_key){
-                            for (func in item_activation_dict[curr_key][1]){
-                                console.log(item_activation_dict[curr_key][1][0]);
-                                eval(func);
+                            for (let index in item_activation_dict[curr_key][1]){
+                                eval(item_activation_dict[curr_key][1][index]);
                                 //TODO: update_progress();
                             }
                         }
                     });
                 }
             }
+            */
             
-            /*TODO: Maybe use eval() for this... SUPER unsafe, LOL
+            /*TODO: 
 
             Make the functions: 
                 -increment_dough_counter()
