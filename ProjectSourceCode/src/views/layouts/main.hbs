@@ -1,7 +1,128 @@
 {{>header}}
 
+
 <div class="non-header">
+
+    <script>
+        var scene_1_visible_items={
+            "antlers":"visible",
+            "complete_carrot_nose":"hidden",
+            "complete_christmas_lights":"hidden",
+            "complete_wreath":"hidden",
+            "key":"hidden",
+            "flour":"visible",
+            "christmas_lights":"visible"
+        }
+
+        console.log(scene_1_visible_items);
+        var current_active_item = "wreath"; //TODO: When the item is clicked in the inventory, set it to the current_active_item
+        const pickupable_item_ids=["carrot","key","cookie_cutter",
+        "flour","sugar","butter","antlers",
+        "mistletoe","lucky_star","christmas_lights","wreath"];
+        //"uncooked_cookies","cooked_cookies",
+        // "key":["lock_closed",[show('lock_open')]], 
+        // item id :[item id of object to click to activate, [function to call on click]]
+        const item_activation_dict={ 
+            "carrot":["snowman",["show('complete_carrot_nose')","show('key')"]], 
+            "key":["lock_closed",["show('lock_open')"]], 
+            "cookie_cutter":["cookie_dough", ["increment_cookie_cutout()"]],
+            "uncooked_cookies":["pan", ["increment_cookie_in_pan()"]],
+            "sugar":["dough_bowl",["increment_dough_counter()"]],
+            "butter":["dough_bowl",["increment_dough_counter()"]],
+            "flour":["dough_bowl",["increment_dough_counter()"]],
+            "antlers":["cauldron",["increment_potion_counter()"]],
+            "mistletoe":["cauldron",["increment_potion_counter()"]],
+            "lucky_star":["cauldron",["increment_potion_counter()"]],
+            "growth_potion":["small_tree",["hide('small_tree')","show('complete_christmas_tree')"]],
+            "christmas_lights":["house",["show('complete_christmas_lights')"]],
+            "wreath":["house",["show('complete_wreath')"]]
+        };
+
+        function hide(id){
+            console.log(scene_1_visible_items);
+            document.getElementById(id).style.visibility = "hidden";
+            scene_1_visible_items[id] = "hidden";
+        }
+
+        function show(id){
+            console.log(scene_1_visible_items);
+            document.getElementById(id).style.visibility = "visible";
+            scene_1_visible_items[id] = "visible";
+        }
+
+        function pickup(id){
+            hide(id);
+            console.log(id + " is found!");
+            current_active_item = id;
+            //TODO: add the item to the inventory
+        }
+
+        function load_items(){
+            //TODO: remove items that should be hidden
+
+            for (let i in pickupable_item_ids){
+                var element = null;
+                try{
+                    element = document.getElementById(pickupable_item_ids[i]);
+                }catch(error){}
+                if(element){
+                    element.addEventListener("click", () => {
+                        pickup(pickupable_item_ids[i]);
+                    });
+                }
+            }
+            //TODO: look into will this cause issues if adding onclick function to object over and over 
+
+            
+            for (let key in item_activation_dict){
+                //if not in the current scene:
+                var item = null;
+                try{
+                    item = document.getElementById(item_activation_dict[key][0])
+                }catch(error){}
+
+                if(item){
+                    item.addEventListener("click", (event) => {
+                        if (current_active_item == key){
+                            for (let index in item_activation_dict[key][1]){
+                                eval(item_activation_dict[key][1][index]);
+                                //TODO: update_progress();
+                            }
+                        }
+                    });
+                }
+            }
+            
+            
+            /*TODO: 
+
+            Make the functions: 
+                -increment_dough_counter()
+                    :
+                        -add 1 to the internal counter, once the counter reaches 3 change scene to scene2_2. 
+                        -Once the increment is 1
+                        -change the '0/3' dough_counter_text to reflect counter
+                -increment_cookie_in_pan()
+                    : 
+
+                -increment_cookie_cutout()
+                    : 
+
+                -increment_potion_counter() 
+                    : 
+                        -add 1 to the internal counter, once the counter reaches 3 show complete_potion (item) and potion_liquid
+                        -change the '0/3' potion_counter_text to reflect counter
+            */
+        }
+
+
+        
+    </script>
     {{{body}}}
+
+    <script>
+        load_items();
+    </script>
 </div>
 
 {{>footer}}
