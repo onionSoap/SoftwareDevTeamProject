@@ -6,11 +6,10 @@
     </svg>
 
     <script>
-        hide('complete_wreath');
-        hide('complete_christmas_lights');
-        hide('complete_carrot_nose');
-        hide('key');
-        load_items();
+
+        for(let item in scene_1_visible_items){
+            document.getElementById(item).style.visibility = scene_1_visible_items[item];
+        }
     </script>
 
 </div>
