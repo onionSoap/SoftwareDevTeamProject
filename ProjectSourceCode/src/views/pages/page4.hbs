@@ -6,8 +6,9 @@
     </svg>
 
     <script>
-        hide('complete_christmas_tree');
-        load_items();
+        for(let item in scene_4_visible_items){
+            document.getElementById(item).style.visibility = scene_4_visible_items[item];
+        }
     </script>
 
 </div>
