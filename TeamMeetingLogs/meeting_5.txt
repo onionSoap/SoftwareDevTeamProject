@@ -1,0 +1,24 @@
+Meeting 11/17/2024 @ 8pm
+Attendees: Emily, Sofia, Leo
+Excused:
+Did not attend: Dorjee, Carter
+
+What has been completed?
+Emily: Wrote three post requests, two/three working but one seems to not work properly (failing a test). Will t/s that. But the other two work properly.
+Leo: Experimenting with hovering over an item and it indicating it can be clicked.
+Sofia: Items are pickup-able, active items can solve puzzles, function "load_items" completed, active listener that checks for if the active item is correct, created disctionaries and arrays
+
+What is still in progress?
+Emily: Posts written but tests for some failing, need to t/s that. Also need to update insert.sql to have all items and puzzles.
+Leo: Hovering item mechanic.
+Sofia: Merge all working parts into main.
+
+What will be our deliverables by Tuesday's meeting?
+Emily: All game-necessary post requests completed (with passing tests for each), insert.sql fully updated with items and puzzles
+Leo: Hover item mechanic.
+Sofia: Everything listen in completed. 
+
+Future thoughts:
+Emily: Integration of all moving parts, all completed and working mechanics pushed to main so that we can access them for testing, don't forget to update the Projects
+Leo: Whatever the team needs done, will work with Sofia to figure out other game mechanics to implement (empty functions that we know we need to do but haven't implemented yet).
+Sofia: How do we store these variables that show what items are showing or not. Look into user session and see if it can be stored there.
