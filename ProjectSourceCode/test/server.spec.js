@@ -27,16 +27,6 @@ describe('Server!', () => {
   });
 });
 
-// *********************** TODO: WRITE 2 UNIT TESTCASES **************************
-
-// Example Positive Testcase :
-// API: /add_user
-// Input: {id: 5, name: 'John Doe', dob: '2020-02-20'}
-// Expect: res.status == 200 and res.body.message == 'Success'
-// Result: This test case should pass and return a status 200 along with a "Success" message.
-// Explanation: The testcase will call the /add_user API with the following input
-// and expects the API to return a status of 200 along with the "Success" message.
-
 describe('Testing Add User Account', () => {
   it('positive : /register', done => {
     chai
@@ -86,11 +76,10 @@ describe('Testing Update Item Status', () => {
       .request(server)
       .post('/update_item_status')
       // const {item_id, new_status} = req.body;
-      .send({item_id: '1', new_status: 'found'})
+      .send({user_id: '1', item_id: '1', new_status: 'found'})
       .end((err, res) => {
         expect(res).to.have.status(200);
-        //console.log("Status in test: ", res.status)
-        // console.log("Res.text: ",res.text);
+        console.log("Res.text: ",res.text);
         expect(res.text).to.include('Item status updated successfully!');
         done();
       });
@@ -99,15 +88,29 @@ describe('Testing Update Item Status', () => {
       chai
         .request(server)
         .post('/update_item_status')
-        .send({item_id: '1', new_status: 'BigTester'})
+        .send({user_id: '1', item_id: '1', new_status: 'BigTester'})
         .end((err, res) => {
           expect(res).to.have.status(400);
-          //expect(res.body.message).to.equals('Invalid input');
-          //console.log(res.body);
           expect(res.body.message).to.equals('Item Status Update Error!');
           done();
         });
     });
+});
+
+describe('Testing update_is_solved', () => {
+  it('positive : /update_is_solved', done => {
+    chai
+      .request(server)
+      .post('/update_is_solved')
+      // const {item_id, new_status} = req.body;
+      .send({user_id: '1', puzzle_id: '1', current_progress: '0'})
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        //console.log("Res.text: ",res.text);
+        expect(res.text).to.include('Puzzle was solved and progress updated successfully!');
+        done();
+      });
+  });
 });
 
 describe('Testing Logout', () => {
@@ -126,32 +129,3 @@ describe('Testing Logout', () => {
       });
   });
 });
-
-//We are checking POST /add_user API by passing the user info in in incorrect manner (name cannot be an integer). This test case should pass and return a status 400 along with a "Invalid input" message.
-
-// describe('Testing Add User Account', () => {
-//   it('positive : /register', done => {
-//     // Refer above for the positive testcase implementation
-//   });
-
-//   // Example Negative Testcase :
-//   // API: /add_user
-//   // Input: {id: 5, name: 10, dob: '2020-02-20'}
-//   // Expect: res.status == 400 and res.body.message == 'Invalid input'
-//   // Result: This test case should pass and return a status 400 along with a "Invalid input" message.
-//   // Explanation: The testcase will call the /add_user API with the following invalid inputs
-//   // and expects the API to return a status of 400 along with the "Invalid input" message.
-//   it('Negative : /register. Checking invalid name', done => {
-//     chai
-//       .request(server)
-//       .post('/register')
-//       .send({username: 10, password: 'BigTester'})
-//       .end((err, res) => {
-//         expect(res).to.have.status(400);
-//         expect(res.body.message).to.equals('Invalid input');
-//         done();
-//       });
-//   });
-// });
-
-// ********************************************************************************
