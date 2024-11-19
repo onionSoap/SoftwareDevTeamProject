@@ -5,12 +5,10 @@
             justify-content: center;
             margin-top: 20px;
         }
-
         .inventory-row {
             display: flex;
             gap: 5px;
         }
-
         .item {
             width: 50px;
             height: 50px;
@@ -19,33 +17,29 @@
             align-items: center;
             justify-content: center;
             background-color: white;
+            cursor: pointer;
         }
-
         .item img {
             width: 80%;
             height: 80%;
         }
-
         .item.unknown {
             background-color: white;
         }
-
         .item.found {
             border: 2px solid black;
         }
-
         .item.active {
             border: 2px solid green; 
             background-color: #e6fff2;
         }
-
         .item.disabled {
             background-color: grey;
             opacity: 0.5; 
         }
     </style>
 
-    <div class="inventory-row">
+    <div class="inventory-row" id="inventoryRow">
         <div class="item active">
             <img src="/resources/plain_svg/carrot-svgrepo-com.svg" alt="Carrot">
         </div>
@@ -83,4 +77,19 @@
             <img src="/resources/plain_svg/star-circle-svgrepo-com.svg" alt="Star">
         </div>
     </div>
+
+    <script>
+        document.getElementById('inventoryRow').addEventListener('click', function (e) {
+            const clickedItem = e.target.closest('.item');
+            if (!clickedItem || clickedItem.classList.contains('disabled')) return;
+
+            const currentActive = document.querySelector('.item.active');
+            if (currentActive) {
+                currentActive.classList.remove('active');
+                currentActive.classList.add('found');
+            }
+            clickedItem.classList.remove('found');
+            clickedItem.classList.add('active');
+        });
+    </script>
 </div>
