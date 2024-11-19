@@ -78,6 +78,10 @@ app.get('/login', (req, res) => {
   res.render('pages/login');
 });
 
+app.get('/inventory', (req, res) => {
+  res.render('pages/inventory');
+})
+
 app.post('/login', async (req, res) => {
     // console.log('login post accessed')
     const username = req.body.username
