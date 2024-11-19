@@ -18,6 +18,7 @@
             justify-content: center;
             background-color: white;
             cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
         }
         .item img {
             width: 80%;
@@ -36,6 +37,12 @@
         .item.disabled {
             background-color: grey;
             opacity: 0.5; 
+        }
+
+        .item:not(.disabled):hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
         }
     </style>
 
