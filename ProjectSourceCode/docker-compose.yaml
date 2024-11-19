@@ -3,7 +3,7 @@ services:
   #these are containers
   db: #this is for the database
     image: postgres:14
-    #env_file: .env
+    env_file: .env
     expose:
       - '5432'
     volumes:
@@ -13,7 +13,7 @@ services:
     image: node:lts
     user: 'node'
     working_dir: /repository
-    #env_file: .env
+    env_file: .env
     environment:
       - NODE_ENV=development
     depends_on:
