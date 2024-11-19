@@ -15,8 +15,7 @@
             <div class="username_head">Username: <span>Test</span></div>
             <div class="progress_head">Progress: <span>---</span></div>
             <div class="timer_head">
-                Timer: <span id="timer-display">05:00</span>
-                <button onclick="startTimer()">Start</button>
+                Timer: <span id="timer-display">00:00</span>
                 <button onclick="stopTimer()">Stop</button>
             </div>
         </div>
@@ -29,28 +28,10 @@
     </header>
 
     <script>
-        let countdown;
-        let timeRemaining = 300;
+        let timer; // Timer reference
+        let elapsedTime = 0; // Start from 0
 
-        function startTimer() {
-            clearInterval(countdown);
-
-            countdown = setInterval(() => {
-                if (timeRemaining <= 0) {
-                    clearInterval(countdown);
-                    document.getElementById("timer-display").textContent = "00:00";
-                    alert("Time's up!");
-                    return;
-                }
-
-                timeRemaining--;
-                updateDisplay(timeRemaining);
-            }, 1000);
-        }
-
-        function stopTimer() {
-            clearInterval(countdown);
-        }
+        // Function to update the timer display
         function updateDisplay(seconds) {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
@@ -58,7 +39,18 @@
                 `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
         }
 
-        updateDisplay(timeRemaining);
+        function startTimer() {
+            timer = setInterval(() => {
+                elapsedTime++;
+                updateDisplay(elapsedTime);
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
+        window.onload = startTimer;
     </script>
 </body>
 </html>
