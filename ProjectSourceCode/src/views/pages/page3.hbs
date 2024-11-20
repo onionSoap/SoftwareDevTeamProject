@@ -1,12 +1,13 @@
 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
 
     {{> svgsettings}}
-    {{> scene3_2 }}
+    {{> scene3 }}
 
     </svg>
     <script>
-        hide("lock_open");
-        load_items();
+        for(let item in scene_3_visible_items){
+            document.getElementById(item).style.visibility = scene_3_visible_items[item];
+        }
     </script>
 
 </div>

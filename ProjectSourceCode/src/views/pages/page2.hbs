@@ -6,7 +6,9 @@
     </svg>
 
     <script>
-        load_items();
+        for(let item in scene_2_visible_items){
+            document.getElementById(item).style.visibility = scene_2_visible_items[item];
+        }
     </script>
 
 </div>
