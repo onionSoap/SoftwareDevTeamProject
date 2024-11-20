@@ -14,13 +14,57 @@
             "christmas_lights":"visible"
         }
 
+        var scene_2_visible_items={
+            "dough_in_bowl":"hidden",
+            "carrot":"visible",
+            "butter":"visible",
+            "sugar":"visible"
+        }
+
+        var scene_2b_visible_items={
+            "cookie_cutout_1":"hidden",
+            "cookie_cutout_2":"hidden",
+            "cookie_cutout_3":"hidden",
+            "cookie_cutout_4":"hidden",
+            "cookie_in_pan_1":"hidden",
+            "cookie_in_pan_2":"hidden",
+            "cookie_in_pan_3":"hidden",
+            "cookie_in_pan_4":"hidden",
+            "pan":"hidden",
+            "oven_door":"visible",
+        }
+
+        var scene_3_visible_items={
+            "lock_open":"hidden",
+            "lock_closed":"visible",
+            "cookie_cutter":"visible",
+            "mistletoe":"visible"
+        }
+
+        var scene_3_b_visible_items={
+            "potion_steam":"hidden", //Just for aesthetic purposes, shows the cauldron bubbling when the potion is complete.
+            "potion":"hidden",
+            "cookie_cutter":"visible",
+            "mistletoe":"visible"
+        }
+
+
+        var scene_4_visible_items={
+            "small_tree":"visible",
+            "lucky_star":"visible",
+            "complete_christmas_tree":"hidden",
+            "wreath":"visible"
+        }
+
+
         console.log(scene_1_visible_items);
         var current_active_item = "wreath"; //TODO: When the item is clicked in the inventory, set it to the current_active_item
         const pickupable_item_ids=["carrot","key","cookie_cutter",
         "flour","sugar","butter","antlers",
-        "mistletoe","lucky_star","christmas_lights","wreath"];
+        "mistletoe","lucky_star","christmas_lights","wreath","potion"];
         //"uncooked_cookies","cooked_cookies",
-        // "key":["lock_closed",[show('lock_open')]], 
+
+
         // item id :[item id of object to click to activate, [function to call on click]]
         const item_activation_dict={ 
             "carrot":["snowman",["show('complete_carrot_nose')","show('key')"]], 
@@ -33,7 +77,7 @@
             "antlers":["cauldron",["increment_potion_counter()"]],
             "mistletoe":["cauldron",["increment_potion_counter()"]],
             "lucky_star":["cauldron",["increment_potion_counter()"]],
-            "growth_potion":["small_tree",["hide('small_tree')","show('complete_christmas_tree')"]],
+            "potion":["small_tree",["hide('small_tree')","show('complete_christmas_tree')"]],
             "christmas_lights":["house",["show('complete_christmas_lights')"]],
             "wreath":["house",["show('complete_wreath')"]]
         };
@@ -58,8 +102,6 @@
         }
 
         function load_items(){
-            //TODO: remove items that should be hidden
-
             for (let i in pickupable_item_ids){
                 var element = null;
                 try{
@@ -71,8 +113,6 @@
                     });
                 }
             }
-            //TODO: look into will this cause issues if adding onclick function to object over and over 
-
             
             for (let key in item_activation_dict){
                 //if not in the current scene:
@@ -102,6 +142,7 @@
                         -add 1 to the internal counter, once the counter reaches 3 change scene to scene2_2. 
                         -Once the increment is 1
                         -change the '0/3' dough_counter_text to reflect counter
+                
                 -increment_cookie_in_pan()
                     : 
 
@@ -110,7 +151,7 @@
 
                 -increment_potion_counter() 
                     : 
-                        -add 1 to the internal counter, once the counter reaches 3 show complete_potion (item) and potion_liquid
+                        -add 1 to the internal counter, once the counter reaches 3, show potion_steam and potion 
                         -change the '0/3' potion_counter_text to reflect counter
             */
         }
