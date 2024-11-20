@@ -1,0 +1,23 @@
+TA meeting 11/19/2024
+Attended: Emily, Sofia, Dorjee
+Excused: 
+Did not attend: Leo, Carter
+
+TA: This is the last official TA group meeting. Sign up for presentations on the canvas calendar. Make sure that you are presenting during the time for our lab section. 
+  if you cannot make it to that lab sectionn, you can do it during lecture time as well. If you want to meet with me last min before presetnation, Mon/Tues of that week 
+  there may be some availability (but it won't be long). You're not expected to work on the fall break, but be sure that it is finished. The presentations are the week
+  of fall break. Cyber security class updates are due the 30th for extra credit. Project board is updated, release notes in meetings folder - asap make an aditional file
+  in your milestones submissions - needs to be more formal - required for project submission. Other than that, needs to be completed soon - aka this week preferably. 
+  Due date Dec 6th for final presentation document. Final project report is due Dec 9th. Code due the day you're going to present, but ideally earlier. 
+Emily: Updated the register to create associations with users_puzzles and users_items, created users_items table, created tests for and made sure posts are working for
+  update_item_status and update_is_solved, future goal is to update those to put instead of post, verify tests are working, create get requests for item status and 
+  puzzle is_solved so that db integration will work properly. 
+Sofia: Worked on the game this week. Made it so that you can pick up all the items you need to by making an array. Local to test, need to integrate it with the inventory
+  system and database. Not fully working, but items can be picked up. If you pick up the lights and put on the house (aka solve the puzzle). This doesn't save between
+  pages, need to integrate with database to make that happen. On main, dictionary with every single item for each scene, shouldn't be difficult to integrate with db. 
+  Function load items is called everytime a page is rendered (adds event liseners). 
+Dorjee: Worked on getting the inventory updated, images populated, active status working, item becomes bigger when it's active. Deactivated items are grayed out and 
+  cannot be selected. Hover also works. Still in it's own page, but after the meeting it will be integrated with the full page. Timer feature still a WIP, but we can
+  see that the timer is going, and it stays across pages. Need to get it so that timer doesn't run on login/logout pages and link the invenotry to the db. 
+
+4:15 Thurday, Dec 5th : PRESENTATION!!!
