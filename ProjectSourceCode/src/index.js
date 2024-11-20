@@ -189,7 +189,7 @@ app.get('/page4', (req, res) => {
 
 //READ UPPERCASE COMMENTS CLOSELY 
 //update this to PUT not POST
-app.post('/update_item_status', async (req, res) => {
+app.patch('/update_item_status', async (req, res) => {
   const {item_id, new_status} = req.body;
   // FOR TESTING PURPOSES, vTHISv IS COMMENTED OUT. ONCE TESTING IS CONCLUDED (aka, docker-compose.yaml set to npm start vs npm run tests) 
   // UNCOMMENT AND REMOVE user_id FROM ABOVE LINE.
@@ -222,7 +222,7 @@ app.post('/update_item_status', async (req, res) => {
 
 //READ UPPERCASE COMMENTS CLOSELY 
 //Update this to PUT not POST
-app.post('/update_is_solved', async (req, res) => {
+app.patch('/update_is_solved', async (req, res) => {
   const {puzzle_id} = req.body
   // FOR TESTING PURPOSES, vTHISv IS COMMENTED OUT. ONCE TESTING IS CONCLUDED (aka, docker-compose.yaml set to npm start vs npm run tests) 
   // UNCOMMENT AND REMOVE user_id FROM ABOVE LINE. ALSO CHECK LATER IN TEST FOR OTHER LINE TO UNCOMMENT AND WHAT ELSE TO REMOVE FROM ABOVE LINE.
@@ -257,6 +257,19 @@ app.post('/update_is_solved', async (req, res) => {
     .catch(function (err) {
       res.status(400).send({message:"Puzzle is_solved failed to update"});
     });
+});
+
+app.patch('/update_timer', async (req, res) => {
+  const {current_time} = req.body
+  const user_id = req.session.user.user_id;
+  const sqlTimerUpdate = "UPDATE users SET timer = $1 WHERE user_id = $2"
+  db.none(sqlTimerUpdate, [current_time,user_id])
+  .then(data => {
+    res.status(200).send({message:"Timer was updated successfully"});
+  })
+  .catch(function (err) {
+    res.status(400).send({message:"Timer failed to update"});
+  });
 });
 
 //add gets for item status, and puzzle is_solved
