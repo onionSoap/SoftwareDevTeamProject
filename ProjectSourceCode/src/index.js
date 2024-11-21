@@ -25,7 +25,7 @@ const hbs = handlebars.create({
 //accessed by either: hosted by another entity (need to have the url to access that)
                     //hosted outself, create two docker containers that runs the application and the other the database
 const dbConfig = {
-  host: process.env.POSTRES_HOST,
+  host: process.env.POSTGRES_HOST,
   port: 5432,
   database: process.env.POSTGRES_DB,
   user: process.env.POSTGRES_USER,
