@@ -32,8 +32,8 @@ VALUES
 -- ["carrot","key","cookie_cutter","flour","sugar","butter","antlers","mistletoe","lucky_star","christmas_lights","wreath"];
 INSERT INTO items (name)
 VALUES
-    ('key'), --don't forget to change this to , instead of ;
     ('carrot'),
+    ('key'), 
     ('cookie_cutter'),
     ('flour'),
     ('sugar'),
@@ -75,3 +75,51 @@ VALUES
     (2,9),
     (2,10),
     (2,11);
+
+-- CREATE_TABLE scenes (
+--     scene_id VARCHAR(2) PRIMARY KEY
+-- );
+
+INSERT INTO scenes (scene_id)
+VALUES
+    ('1'),
+    ('2'),
+    ('2b'),
+    ('3'),
+    ('3b'),
+    ('4');
+-- CREATE TABLE scene_state (
+--     scene_number VARCHAR(2) PRIMARY KEY,
+--     object VARCHAR(30) NOT NULL,
+--     visible_state VARCHAR(7) CHECK(status IN('visible','hidden'))
+-- );
+-- var scene_1_visible_items={
+--             "antlers":"visible",
+--             "complete_carrot_nose":"hidden",
+--             "complete_christmas_lights":"hidden",
+--             "complete_wreath":"hidden",
+--             "key":"hidden",
+--             "flour":"visible",
+--             "christmas_lights":"visible"
+--             }
+-- var scene_2_visible_items={
+--                 "dough_in_bowl":"hidden",
+--                 "carrot":"visible",
+--                 "butter":"visible",
+--                 "sugar":"visible"
+--             }
+
+INSERT INTO scene_state (scene_number, object, visible_state)
+VALUES
+    ('1','antlers','visible'),
+    ('1','complete_carrot_nose', 'hidden'),
+    ('1','complete_christmas_lights', 'hidden'),
+    ('1','complete_wreath', 'hidden'),
+    ('1','key','visible'),
+    ('1','flour','visible'),
+    ('1','christmas_lights','visible'),
+    -- ('2', 'dough_in_bowl', 'hidden'),
+    -- ('2', 'carrot', 'visible'),
+    -- ('2', 'butter', 'visible'),
+    -- ('2', 'sugar', 'visible');
+    -- add rest later
