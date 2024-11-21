@@ -57,14 +57,12 @@
             "wreath":"visible"
         }
 
-
-        console.log(scene_1_visible_items);
         var current_active_item = "wreath"; //TODO: When the item is clicked in the inventory, set it to the current_active_item
+        
         const pickupable_item_ids=["carrot","key","cookie_cutter",
         "flour","sugar","butter","antlers",
         "mistletoe","lucky_star","christmas_lights","wreath","potion"];
         //"uncooked_cookies","cooked_cookies",
-
 
         // item id :[item id of object to click to activate, [function to call on click]]
         const item_activation_dict={ 
@@ -83,16 +81,37 @@
             "wreath":["house",["show('complete_wreath')"]]
         };
 
+        function update_progress(id){
+            /*axios.post("http://localhost:3000/update_is_solved", {
+                name : id
+            })
+            .then((response) => console.log(response.data))
+            .then((error) => console.log(error)); */
+
+            axios({
+                url: `http://localhost:3000/update_is_solved`,
+                method: 'POST',
+                dataType: 'json',
+                headers: {},
+                params: {
+                    name : id
+
+                },
+                }).then(results => {
+                    console.log(response.data);
+                }).catch(error => {
+                    console.log(error);
+                });
+        }
+
         function hide(id){
-            console.log(scene_1_visible_items);
             document.getElementById(id).style.visibility = "hidden";
-            scene_1_visible_items[id] = "hidden";
+            scene_1_visible_items[id] = "hidden"; //TODO: change this to include all scenes
         }
 
         function show(id){
-            console.log(scene_1_visible_items);
             document.getElementById(id).style.visibility = "visible";
-            scene_1_visible_items[id] = "visible";
+            scene_1_visible_items[id] = "visible"; //TODO: change this to include all scenes
         }
 
         function pickup(id){
@@ -127,8 +146,8 @@
                         if (current_active_item == key){
                             for (let index in item_activation_dict[key][1]){
                                 eval(item_activation_dict[key][1][index]);
-                                //TODO: update_progress();
                             }
+                            update_progress(key);
                         }
                     });
                 }
