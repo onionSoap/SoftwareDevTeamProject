@@ -25,7 +25,7 @@ const hbs = handlebars.create({
 //accessed by either: hosted by another entity (need to have the url to access that)
                     //hosted outself, create two docker containers that runs the application and the other the database
 const dbConfig = {
-  host: 'db',
+  host: process.env.POSTGRES_HOST,
   port: 5432,
   database: process.env.POSTGRES_DB,
   user: process.env.POSTGRES_USER,
@@ -101,6 +101,7 @@ app.post('/login', async (req, res) => {
         // if (user.password == password && user.username == username){
         // console.log("if statement")
         delete user.password;
+        delete user.password;
         req.session.user = user;
         req.session.save();
         res.status(200);
@@ -148,12 +149,29 @@ app.post('/register', async (req, res) => {
     // console.log("Users_Puzzles: ", temp_up)
     const temp_ui = await db.any(sqlUsersItems, [temp_user.user_id]);
     // console.log("Users_Items: ", temp_ui);
+  const sqlRegister = "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *;" ;
+  const sqlUsersPuzzles = "INSERT INTO users_puzzles (user_id, puzzle_id) VALUES ($1, 1), ($1, 2), ($1, 3) RETURNING *;";
+  const sqlUsersItems = "INSERT INTO users_items (user_id, item_id) VALUES ($1, 1),($1, 2),($1, 3),($1, 4),($1, 5),($1, 6),($1, 7),($1, 8),($1, 9),($1,10),($1, 11) RETURNING *";
+  try{
+    // console.log("In try")
+    // const temp_<w/e> NOT NECESSARY BUT GOOD TO T/S 
+    const temp_user = await db.one(sqlRegister, [username, hash]); //changed to one to get the temp_user variable data
+    // console.log("Users: ", temp_user)
+    console.log("temp_user.user_id: ",temp_user.user_id)
+    const temp_up = await db.any(sqlUsersPuzzles, [temp_user.user_id]); //changed to any instead of one since there are three insertions
+    // console.log("Users_Puzzles: ", temp_up)
+    const temp_ui = await db.any(sqlUsersItems, [temp_user.user_id]);
+    // console.log("Users_Items: ", temp_ui);
     res.status(200).render('pages/register', {message: "Registration Successful!"});
+  }
+  catch(error) {
+    // console.log("in catch")
   }
   catch(error) {
     // console.log("in catch")
     res.status(400).render('pages/register', {message: "Registration Error!", error: true});
     // res.redirect('/register', {message:"Registration Error!", error: true});
+  }
   }
 });
 
@@ -198,6 +216,7 @@ app.get('/page2', (req, res) => {
 });
 
 app.get('/page3', (req, res) => {
+  res.render('pages/page3', {user: req.session.user}); //this will call the /anotherRoute route in the API
   res.render('pages/page3', {user: req.session.user}); //this will call the /anotherRoute route in the API
 });
 

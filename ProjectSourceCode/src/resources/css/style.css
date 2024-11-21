@@ -2,7 +2,7 @@
 
 /* Christmas green background, color of text is white */
 .header {
-  height:10vh;
+  height:12vh;
   background-color: #2e5d31;
   color: white;
   padding: 10px;
@@ -12,7 +12,7 @@
 }
 
 .footer {
-  height:10vh;
+  height:5vh;
   background-color: #2e5d31;
   color: white;
   padding: 10px;
@@ -21,16 +21,20 @@
   text-align: center;
 }
 
-.footer a {
-  color: white;
-  padding: 5px 10px;
-  transition: background .3s;
-  font-weight: bolder;
+.non-header {
+  height:83vh;
 }
 
-.non-header {
-  height:90vh;
+.inventory {
+  display: flex;
+  justify-content: center;
+  position:absolute;
+  margin:0;
+  bottom:7%;
+  left: 50%;
+  transform: translate(-50%, 0%);
 }
+
 
 .first-tier {
   display: flex;
