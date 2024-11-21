@@ -43,46 +43,52 @@
 
     <div class="inventory-row" id="inventoryRow">
         <div class="item active">
-            <img src="/resources/plain_svg/carrot-svgrepo-com.svg" alt="Carrot">
+            <img src="/resources/plain_svg/carrot-svgrepo-com.svg" alt="carrot">
         </div>
         <div class="item found">
-            <img src="/resources/plain_svg/key-svgrepo-com.svg" alt="Key">
+            <img src="/resources/plain_svg/key-svgrepo-com.svg" alt="key">
+        </div>
+        <div class="item found">
+            <img src="/resources/plain_svg/potion-svgrepo-com.svg" alt="potion">
+        </div>
+        <div class="item found">
+            <img src="/resources/plain_svg/christmas-cracker-svgrepo-com.svg" alt="cookie_cutter">
+        </div>
+        <div class="item found">
+            <img src="/resources/plain_svg/gingerbread-man-svgrepo-com.svg" alt="cooked_gingerbread_men">
+        </div>
+        <div class="item found">
+            <img src="/resources/plain_svg/flour-svgrepo-com.svg" alt="flour">
         </div>
         <div class="item disabled">
-            <img src="/resources/plain_svg/potion-svgrepo-com.svg" alt="Cookie Cutter">
+            <img src="/resources/plain_svg/butter-svgrepo-com.svg" alt="butter">
         </div>
         <div class="item found">
-            <img src="/resources/plain_svg/christmas-cracker-svgrepo-com.svg" alt="Uncooked Gingerbread Men">
+            <img src="/resources/plain_svg/sugar-cube-svgrepo-com.svg" alt="sugar">
         </div>
         <div class="item found">
-            <img src="/resources/plain_svg/gingerbread-man-svgrepo-com.svg" alt="Cooked Gingerbread Men">
+            <img src="/resources/plain_svg/deer-svgrepo-com.svg" alt="antlers">
         </div>
         <div class="item found">
-            <img src="/resources/plain_svg/flour-svgrepo-com.svg" alt="Flour">
-        </div>
-        <div class="item disabled">
-            <img src="/resources/plain_svg/butter-svgrepo-com.svg" alt="Butter">
+            <img src="/resources/plain_svg/mistletoe-christmas-svgrepo-com.svg" alt="mistletoe">
         </div>
         <div class="item found">
-            <img src="/resources/plain_svg/sugar-cube-svgrepo-com.svg" alt="Sugar">
+            <img src="/resources/plain_svg/lights-christmas-svgrepo-com.svg" alt="christmas_lights">
         </div>
         <div class="item found">
-            <img src="/resources/plain_svg/deer-svgrepo-com.svg" alt="Antlers">
+            <img src="/resources/plain_svg/star-circle-svgrepo-com.svg" alt="star">
         </div>
         <div class="item found">
-            <img src="/resources/plain_svg/mistletoe-christmas-svgrepo-com.svg" alt="Mistletoe">
+            <img src="/resources/plain_svg/christmas-wreath-svgrepo-com.svg" alt="wreath">
         </div>
-        <div class="item disabled">
-            <img src="/resources/plain_svg/lights-christmas-svgrepo-com.svg" alt="Christmas Lights">
-        </div>
-        <div class="item found">
-            <img src="/resources/plain_svg/star-circle-svgrepo-com.svg" alt="Star">
-        </div>
+
+        <!--TODO: add wreath-->
     </div>
 
     <script>
         document.getElementById('inventoryRow').addEventListener('click', function (e) {
             const clickedItem = e.target.closest('.item');
+
             if (!clickedItem || clickedItem.classList.contains('disabled')) return;
 
             const currentActive = document.querySelector('.item.active');
@@ -92,6 +98,7 @@
             }
             clickedItem.classList.remove('found');
             clickedItem.classList.add('active');
+            current_active_item = clickedItem.children[0].alt;
         });
     </script>
 </div>
