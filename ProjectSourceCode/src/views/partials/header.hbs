@@ -11,46 +11,58 @@
 
 <body>
     <header class="header">
-        <div class="first-tier">
-            <div class="username_head">Username: <span>Test</span></div>
-            <div class="progress_head">Progress: <span>---</span></div>
-            <div class="timer_head">
-                Timer: <span id="timer-display">00:00</span>
-                <button onclick="stopTimer()">Stop</button>
-            </div>
+    <div class="first-tier">
+        <div class="username_head">Username: <span>Test</span></div>
+        <div class="progress_head">Progress: <span>---</span></div>
+        <div class="timer_head">
+            Timer: <span id="timer-display">00:00</span>
+            <button onclick="stopTimer()">Stop</button>
         </div>
-        <nav class="second-tier">
-            <a href="page1">Page1</a>
-            <a href="page2">Page2</a>
-            <a href="page3">Page3</a>
-            <a href="logout">Logout</a>
-        </nav>
-    </header>
+    </div>
+    <nav class="second-tier">
+        <a href="page1">Page1</a>
+        <a href="page2">Page2</a>
+        <a href="page3">Page3</a>
+        <a href="logout">Logout</a>
+    </nav>
+</header>
 
-    <script>
-        let timer; // Timer reference
-        let elapsedTime = 0; // Start from 0
+<script>
+    let timer; // Timer reference
+    let elapsedTime = 0; // Start from 0
 
-        // Function to update the timer display
-        function updateDisplay(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            document.getElementById("timer-display").textContent = 
-                `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-        }
+    // Load timer progress from local storage (if available)
+    if (localStorage.getItem('elapsedTime')) {
+        elapsedTime = parseInt(localStorage.getItem('elapsedTime'), 10);
+    }
 
-        function startTimer() {
-            timer = setInterval(() => {
-                elapsedTime++;
-                updateDisplay(elapsedTime);
-            }, 1000);
-        }
+    // Function to update the timer display
+    function updateDisplay(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        document.getElementById("timer-display").textContent = 
+            `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
 
-        function stopTimer() {
-            clearInterval(timer);
-        }
+    // Function to start the timer
+    function startTimer() {
+        timer = setInterval(() => {
+            elapsedTime++;
+            localStorage.setItem('elapsedTime', elapsedTime); // Save progress in local storage
+            updateDisplay(elapsedTime);
+        }, 1000); // Increment every second
+    }
 
-        window.onload = startTimer;
-    </script>
+    // Function to stop the timer
+    function stopTimer() {
+        clearInterval(timer);
+    }
+
+    // Automatically start the timer when the page loads
+    window.onload = () => {
+        updateDisplay(elapsedTime); // Show the stored elapsed time
+        startTimer(); // Start or resume the timer
+    };
+</script>
 </body>
 </html>
