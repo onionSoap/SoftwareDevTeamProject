@@ -222,23 +222,63 @@ app.post('/update_item_status', async (req, res) => {
 });
 
 //READ UPPERCASE COMMENTS CLOSELY 
-//Update this to PUT not POST
+// //Update this to PUT not POST
+// app.post('/update_is_solved', async (req, res) => {
+//   console.log(req.body);
+//   const {puzzle_id} = req.body
+//   // FOR TESTING PURPOSES, vTHISv IS COMMENTED OUT. ONCE TESTING IS CONCLUDED (aka, docker-compose.yaml set to npm start vs npm run tests) 
+//   // UNCOMMENT AND REMOVE user_id FROM ABOVE LINE. ALSO CHECK LATER IN TEST FOR OTHER LINE TO UNCOMMENT AND WHAT ELSE TO REMOVE FROM ABOVE LINE.
+//   const user_id = req.session.user.user_id
+  
+//     // console.log(puzzle_id, user_id);
+//     const sql_update_is_solved = "UPDATE users_puzzles SET is_solved = TRUE WHERE user_id = $1 AND puzzle_id = $2;";
+//     db.none(sql_update_is_solved, [user_id, puzzle_id])
+//     .then(data => {
+
+//       // IF NOT RUNNING TESTS, UNCOMMENT THIS AND REMOVE current_progress FROM FIRST LINE ABOVE (same as user_id)
+//       var current_progress = req.session.user.progress 
+
+
+//       const sql_get_progress_amount = 'SELECT value FROM puzzles WHERE puzzle_id = $1';
+//       db.one(sql_get_progress_amount, [puzzle_id])
+//         .then(data => {
+//           const sql_item_update = 'UPDATE users SET progress = $1 WHERE user_id = $2'; //fixed this
+//           var updated_progress = current_progress + data.value //update in postgres
+//           db.none(sql_item_update, [updated_progress, user_id])
+//           .then(data2 => {
+//             res.status(200).send({message:"Puzzle was solved and progress updated successfully!"});
+//           })
+//           .catch(function (err) {
+//             res.status(400).send({message:"Progress failed to update"});
+//           });
+//         })
+//         .catch(function (err){
+//           res.status(400).send({message:"Failed to grab progress amount."});
+//         });
+//     })
+//     .catch(function (err) {
+//       res.status(400).send({message:"Puzzle is_solved failed to update"});
+//     });
+// });
+
+
 app.post('/update_is_solved', async (req, res) => {
   const {name} = req.body;
   const user_id = req.session.user.user_id;
   
-  console.log(name);
+
   //Find the puzzle id:
   const sql_get_puzzle_id =`SELECT puzzle_id FROM puzzles WHERE name = '${name}'`;
   db.many(sql_get_puzzle_id).then(data => {
-
     //Update that the puzzle is solved for the user:
     const sql_update_is_solved = "UPDATE users_puzzles SET is_solved = TRUE WHERE user_id = $1 AND puzzle_id = $2;";
-    db.none(sql_update_is_solved, [user_id, data.puzzle_id]).then(data2 => {
+    db.none(sql_update_is_solved, [user_id, data[0].puzzle_id]).then(data2 => {
 
       //Update the user's progress:
       const sql_item_update = 'UPDATE users SET progress = $1 WHERE user_id = $2;'; 
-        var updated_progress = current_progress + 1; //Assumed to always be one.
+      req.session.user.progress += 1;
+        var updated_progress = req.session.user.progress;
+
         db.none(sql_item_update, [updated_progress, user_id])
           .then(data2 => {
             res.status(200).send({message:"Puzzle was solved and progress updated successfully!"});
@@ -248,7 +288,7 @@ app.post('/update_is_solved', async (req, res) => {
           });
     });
   }).catch(function (err) {
-    res.status(400).send({message:"Puzzle is_solved failed to update (Incorrect puzzle name)"});
+    res.status(400).send({message:"Puzzle is_solved failed to update (Incorrect puzzle name)."});
   });
 
 

@@ -12,6 +12,8 @@ VALUES
 -- puzzles 1-3, values at 33,33, and 34 (total 100)
 INSERT INTO puzzles (name, value)
 VALUES
+    ('wreath',1),
+    ('christmas_lights',1),
     ('Lock_and_key',34),
     ('Light_up_tree',33),
     ('Open_the_present',33);

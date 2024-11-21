@@ -82,26 +82,13 @@
         };
 
         function update_progress(id){
-            /*axios.post("http://localhost:3000/update_is_solved", {
+
+            axios.post("update_is_solved", {
                 name : id
             })
             .then((response) => console.log(response.data))
-            .then((error) => console.log(error)); */
+            .then((error) => console.log(error));
 
-            axios({
-                url: `http://localhost:3000/update_is_solved`,
-                method: 'POST',
-                dataType: 'json',
-                headers: {},
-                params: {
-                    name : id
-
-                },
-                }).then(results => {
-                    console.log(response.data);
-                }).catch(error => {
-                    console.log(error);
-                });
         }
 
         function hide(id){
@@ -150,6 +137,7 @@
                             update_progress(key);
                         }
                     });
+
                 }
             }
             
