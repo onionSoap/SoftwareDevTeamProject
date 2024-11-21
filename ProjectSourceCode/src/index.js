@@ -189,35 +189,77 @@ app.get('/page4', (req, res) => {
 
 //READ UPPERCASE COMMENTS CLOSELY 
 //update this to PUT not POST
+// app.patch('/update_item_status', async (req, res) => {
+//   const {item_id, new_status} = req.body;
+//   // FOR TESTING PURPOSES, vTHISv IS COMMENTED OUT. ONCE TESTING IS CONCLUDED (aka, docker-compose.yaml set to npm start vs npm run tests) 
+//   // UNCOMMENT AND REMOVE user_id FROM ABOVE LINE.
+//   const user_id = req.session.user.user_id
+
+//   // console.log("Req.body in post req: ",req.body);
+//   //try to update the item status 
+//   try{
+//     const sql_item_update = 'UPDATE users_items SET status = $1 WHERE user_id = $2 AND item_id = $3 RETURNING *';
+//     //call update with db.one and the new_status and item_id that we want to update
+//     db.one(sql_item_update, [new_status, user_id, item_id])
+//     //do we need the data? just put it because I always do.
+//     //also, don't reload the page bc tehre's no need (I think? We dont' want to have to refresh the page everytime we click an item)
+//     .then(data => {
+//       res.status(200).send({message:"Item status updated successfully!"});
+//       // console.log('Item_id: ', item_id, " and new_status: ", new_status);
+//     })
+//     //reload the page with the error message pop-up
+//     .catch(function (err) {
+//       res.status(400).json({message:"Item Status Update Error!"});
+//       // res.redirect('/page2');
+//     });
+//   }
+//   //error if unable to
+//   catch (error){
+//     console.error('Error updating item status: ', error);
+//     res.status(400).send({error: 'Failed to update item status.'});
+//   }
+// });
+
 app.patch('/update_item_status', async (req, res) => {
-  const {item_id, new_status} = req.body;
+  const {user_id, item_id, new_status} = req.body;
   // FOR TESTING PURPOSES, vTHISv IS COMMENTED OUT. ONCE TESTING IS CONCLUDED (aka, docker-compose.yaml set to npm start vs npm run tests) 
   // UNCOMMENT AND REMOVE user_id FROM ABOVE LINE.
-  const user_id = req.session.user.user_id
-
-  // console.log("Req.body in post req: ",req.body);
-  //try to update the item status 
+  // const user_id = req.session.user.user_id
+  // const valid_status = ['unknown','found','active','inactive'];
+  // if(!valid_status.includes(new_status)){
+  //   res.status(400).send({error: 'Item Status Update Error!'});
+  // }
   try{
-    const sql_item_update = 'UPDATE users_items SET status = $1 WHERE user_id = $2 AND item_id = $3 RETURNING *';
-    //call update with db.one and the new_status and item_id that we want to update
-    db.one(sql_item_update, [new_status, user_id, item_id])
-    //do we need the data? just put it because I always do.
-    //also, don't reload the page bc tehre's no need (I think? We dont' want to have to refresh the page everytime we click an item)
-    .then(data => {
-      res.status(200).send({message:"Item status updated successfully!"});
-      // console.log('Item_id: ', item_id, " and new_status: ", new_status);
-    })
-    //reload the page with the error message pop-up
-    .catch(function (err) {
-      res.status(400).json({message:"Item Status Update Error!"});
-      // res.redirect('/page2');
-    });
+    if(new_status == 'active'){
+      const sqlFindActive = "SELECT * FROM users_items WHERE user_id = $1 AND status = 'active'";
+      const current_active = await db.any(sqlFindActive, [user_id]);
+      if(current_active.length > 0){ //aka, if the array is not empty (should only be 1 tho)
+        const sqlChangeActive = "UPDATE users_items SET status = 'found' WHERE user_id = $1 AND item_id = $2";
+        await db.none(sqlChangeActive, [user_id, current_active[0].item_id]);
+      }
+    }
+    const sql_item_update = 'UPDATE users_items SET status = $1 WHERE user_id = $2 AND item_id = $3';
+    await db.none(sql_item_update, [new_status, user_id, item_id]);
+    res.status(200).send({message:"Item status updated successfully!"});
   }
   //error if unable to
   catch (error){
     console.error('Error updating item status: ', error);
-    res.status(400).send({error: 'Failed to update item status.'});
+    res.status(400).send({error: 'Item Status Update Error!'});
   }
+});
+
+app.get('/all_current_item_status', async (req, res) => {
+  //const {item_id} = req.body
+  const user_id = req.session.user.user_id;
+  const sqlGetStatus = "SELECT status FROM users_items WHERE user_id = $1"
+  db.any(sqlGetStatus, [user_id])
+  .then(data => {
+    res.status(200).send({message:"Status was found and sent", item_status: data});
+  })
+  .catch(function (err) {
+    res.status(400).send({message:"Failed to get status"});
+  });
 });
 
 //READ UPPERCASE COMMENTS CLOSELY 
