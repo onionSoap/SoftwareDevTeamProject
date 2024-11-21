@@ -1,4 +1,10 @@
 -- need to make PostgresSQL not mySQL
+DROP TABLE IF EXISTS users_puzzles;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS puzzles;
+DROP TABLE IF EXISTS items;
+
+
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(30) NOT NULL UNIQUE,
