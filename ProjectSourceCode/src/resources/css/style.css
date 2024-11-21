@@ -21,15 +21,8 @@
   text-align: center;
 }
 
-.footer a {
-  color: white;
-  padding: 5px 10px;
-  transition: background .3s;
-  font-weight: bolder;
-}
-
 .non-header {
-  height:90vh;
+  height:80vh;
 }
 
 .first-tier {
