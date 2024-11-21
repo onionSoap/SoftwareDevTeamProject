@@ -3,12 +3,26 @@
     {{> svgsettings}}
     {{> scene2 }}
 
+    {{#if scene_2_visible_items}}
+        <p> hello!</p>
+
+        <script>
+            var items = ({{{scene_2_visible_items}}});
+            console.log(items);
+            items.forEach((obj, i) => {
+                document.getElementById(obj.object).style.visibility = obj.visible_state;//console.log(obj.visible_state, i);
+            })
+        </script>
+    {{/if}}
+
     </svg>
 
-    <script>
+
+    {{!-- <script>
         for(let item in scene_2_visible_items){
             document.getElementById(item).style.visibility = scene_2_visible_items[item];
+            //may need to add 2b
         }
-    </script>
+    </script> --}}
 
 </div>

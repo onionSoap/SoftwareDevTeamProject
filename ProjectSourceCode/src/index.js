@@ -71,22 +71,6 @@ app.get('/welcome', (req, res) => {
 });
 
 
-app.get('/page1', (req, res) => {
-  res.render('pages/page1'); //this will call the /anotherRoute route in the API
-});
-
-app.get('/page2', (req, res) => {
-  res.render('pages/page2'); //this will call the /anotherRoute route in the API
-});
-
-app.get('/page3', (req, res) => {
-  res.render('pages/page3'); //this will call the /anotherRoute route in the API
-});
-
-app.get('/page4', (req, res) => {
-  res.render('pages/page4'); //this will call the /anotherRoute route in the API
-});
-
 app.get('/', (req, res) => {
   res.redirect('/login'); //this will call the /anotherRoute route in the API
 });
@@ -187,53 +171,75 @@ const auth = (req, res, next) => {
 app.use(auth);
 
 app.get('/page1', (req, res) => {
-  res.render('pages/page1', {user: req.session.user}); //this will call the /anotherRoute route in the API
+  const sqlPage1 = "SELECT * FROM scene_state WHERE scene_number = '1';";
+  db.any(sqlPage1)
+  .then(data =>{
+    var scene_1_visible_items = data;
+    console.log("Scene_1...:",scene_1_visible_items)// ", and Scene_1_Visible_Items: ", scene_1_visible_items
+    res.render('pages/page1', {user: req.session.user, scene_1_visible_items: JSON.stringify(data)}); 
+  })
+  .catch(function (err){
+    res.status(400).send({message:"Failed to load page 1 from db data."});
+  });
 });
 
 app.get('/page2', (req, res) => {
-  res.render('pages/page2', {user: req.session.user}); //this will call the /anotherRoute route in the API
+  //res.render('pages/page2', {user: req.session.user}); //this will call the /anotherRoute route in the API
+  const sqlPage2 = "SELECT * FROM scene_state WHERE scene_number = '2';";
+  db.any(sqlPage2)
+  .then(data =>{
+    var scene_2_visible_items = data;
+    console.log("Scene_2...:",scene_2_visible_items)
+    res.render('pages/page2', {user: req.session.user, scene_2_visible_items: JSON.stringify(data)}); 
+  })
+  .catch(function (err){
+    res.status(400).send({message:"Failed to load page 2 from db data."});
+  });
 });
 
 app.get('/page3', (req, res) => {
   res.render('pages/page3', {user: req.session.user}); //this will call the /anotherRoute route in the API
 });
 
+app.get('/page4', (req, res) => {
+  res.render('pages/page4'); //this will call the /anotherRoute route in the API
+});
 //These moved below middleware bc only logged-in users should be able to do these actions. For testing purposes, move ABOVE middleware!
 
 //READ UPPERCASE COMMENTS CLOSELY 
-app.post('/update_item_status', async (req, res) => {
-  const {item_id, new_status} = req.body;
+//update this to PATCH not POST
+app.patch('/update_item_status', async (req, res) => {
+  const {user_id, item_id, new_status} = req.body;
   // FOR TESTING PURPOSES, vTHISv IS COMMENTED OUT. ONCE TESTING IS CONCLUDED (aka, docker-compose.yaml set to npm start vs npm run tests) 
   // UNCOMMENT AND REMOVE user_id FROM ABOVE LINE.
-  const user_id = req.session.user.user_id
-
-  // console.log("Req.body in post req: ",req.body);
-  //try to update the item status 
+  // const user_id = req.session.user.user_id
+  // const valid_status = ['unknown','found','active','inactive'];
+  // if(!valid_status.includes(new_status)){
+  //   res.status(400).send({error: 'Item Status Update Error!'});
+  // }
   try{
-    const sql_item_update = 'UPDATE users_items SET status = $1 WHERE user_id = $2 AND item_id = $3 RETURNING *';
-    //call update with db.one and the new_status and item_id that we want to update
-    db.one(sql_item_update, [new_status, user_id, item_id])
-    //do we need the data? just put it because I always do.
-    //also, don't reload the page bc tehre's no need (I think? We dont' want to have to refresh the page everytime we click an item)
-    .then(data => {
-      res.status(200).send({message:"Item status updated successfully!"});
-      // console.log('Item_id: ', item_id, " and new_status: ", new_status);
-    })
-    //reload the page with the error message pop-up
-    .catch(function (err) {
-      res.status(400).json({message:"Item Status Update Error!"});
-      // res.redirect('/page2');
-    });
+    if(new_status == 'active'){
+      const sqlFindActive = "SELECT * FROM users_items WHERE user_id = $1 AND status = 'active'";
+      const current_active = await db.any(sqlFindActive, [user_id]);
+      if(current_active.length > 0){ //aka, if the array is not empty (should only be 1 tho)
+        const sqlChangeActive = "UPDATE users_items SET status = 'found' WHERE user_id = $1 AND item_id = $2";
+        await db.none(sqlChangeActive, [user_id, current_active[0].item_id]);
+      }
+    }
+    const sql_item_update = 'UPDATE users_items SET status = $1 WHERE user_id = $2 AND item_id = $3';
+    await db.none(sql_item_update, [new_status, user_id, item_id]);
+    res.status(200).send({message:"Item status updated successfully!"});
   }
   //error if unable to
   catch (error){
     console.error('Error updating item status: ', error);
-    res.status(400).send({error: 'Failed to update item status.'});
+    res.status(400).send({error: 'Item Status Update Error!'});
   }
 });
 
 //READ UPPERCASE COMMENTS CLOSELY 
-app.post('/update_is_solved', async (req, res) => {
+//Update this to PUT not POST
+app.patch('/update_is_solved', async (req, res) => {
   const {puzzle_id} = req.body
   // FOR TESTING PURPOSES, vTHISv IS COMMENTED OUT. ONCE TESTING IS CONCLUDED (aka, docker-compose.yaml set to npm start vs npm run tests) 
   // UNCOMMENT AND REMOVE user_id FROM ABOVE LINE. ALSO CHECK LATER IN TEST FOR OTHER LINE TO UNCOMMENT AND WHAT ELSE TO REMOVE FROM ABOVE LINE.
@@ -270,6 +276,35 @@ app.post('/update_is_solved', async (req, res) => {
     });
 });
 
+app.patch('/update_timer', async (req, res) => {
+  const {user_id, current_time} = req.body
+  // const user_id = req.session.user.user_id;
+  const sqlTimerUpdate = "UPDATE users SET timer = $1 WHERE user_id = $2"
+  db.none(sqlTimerUpdate, [current_time,user_id])
+  .then(data => {
+    res.status(200).send({message:"Timer was updated successfully"});
+  })
+  .catch(function (err) {
+    res.status(400).send({message:"Timer failed to update"});
+  });
+});
+
+//WIP
+app.get('/all_current_item_status', async (req, res) => {
+  //const {item_id} = req.body
+  const user_id = req.session.user.user_id;
+  const sqlGetStatus = "SELECT status FROM users_items WHERE user_id = $1"
+  db.any(sqlGetStatus, [user_id])
+  .then(data => {
+    res.status(200).send({message:"Status was found and sent", item_status: data});
+  })
+  .catch(function (err) {
+    res.status(400).send({message:"Failed to get status"});
+  });
+});
+
+//add gets for item status, and puzzle is_solved
+
 app.get('/logout', (req, res) => {
   req.session.destroy()
   res.status(200);
@@ -278,3 +313,6 @@ app.get('/logout', (req, res) => {
 
 module.exports = app.listen(3000);
 console.log('Server is listening on port 3000');
+
+
+// [] [] [b] [y] [c] 

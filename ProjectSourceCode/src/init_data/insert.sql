@@ -118,8 +118,8 @@ VALUES
     ('1','key','visible'),
     ('1','flour','visible'),
     ('1','christmas_lights','visible'),
-    -- ('2', 'dough_in_bowl', 'hidden'),
-    -- ('2', 'carrot', 'visible'),
-    -- ('2', 'butter', 'visible'),
-    -- ('2', 'sugar', 'visible');
+    ('2', 'dough_in_bowl', 'hidden'),
+    ('2', 'carrot', 'visible'),
+    ('2', 'butter', 'visible'),
+    ('2', 'sugar', 'visible');
     -- add rest later

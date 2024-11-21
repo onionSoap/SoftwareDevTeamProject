@@ -13,14 +13,22 @@
 <body>
     <header class="header">
         <div class="first-tier">
-            <div class="username_head">Username: <span>Test</span></div>
-            <div class="progress_head">Progress: <span>---</span></div>
-            <div class="timer_head">Timer: <span>---</span></div>
+            {{#if user}}
+                <div class="username_head">Username: <span>{{user.username}}</span></div>
+                <div class="progress_head">Progress: <span>{{user.progress}}</span></div>
+                <div class="timer_head">Timer: <span>{{user.timer}}</span></div>
+            {{else}}
+                <div class="username_head">Username: <span>N/A</span></div>
+                <div class="progress_head">Progress: <span>---</span></div>
+                <div class="timer_head">Timer: <span>---</span></div>
+            {{/if}}
+            
         </div>
         <nav class="second-tier">
             <a href="page1">Page1</a>
             <a href="page2">Page2</a>
             <a href="page3">Page3</a>
+            <a href="page4">Page4</a>
             <a href="logout">Logout</a>
         </nav>
     </header>

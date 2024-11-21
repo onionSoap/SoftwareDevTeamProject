@@ -4,7 +4,8 @@
 <div class="non-header">
 
     <script>
-        var scene_1_visible_items={
+        /*
+            var scene_1_visible_items={
             "antlers":"visible",
             "complete_carrot_nose":"hidden",
             "complete_christmas_lights":"hidden",
@@ -12,49 +13,43 @@
             "key":"hidden",
             "flour":"visible",
             "christmas_lights":"visible"
-        }
-
-        var scene_2_visible_items={
-            "dough_in_bowl":"hidden",
-            "carrot":"visible",
-            "butter":"visible",
-            "sugar":"visible"
-        }
-
-        var scene_2b_visible_items={
-            "cookie_cutout_1":"hidden",
-            "cookie_cutout_2":"hidden",
-            "cookie_cutout_3":"hidden",
-            "cookie_cutout_4":"hidden",
-            "cookie_in_pan_1":"hidden",
-            "cookie_in_pan_2":"hidden",
-            "cookie_in_pan_3":"hidden",
-            "cookie_in_pan_4":"hidden",
-            "pan":"hidden",
-            "oven_door":"visible",
-        }
-
-        var scene_3_visible_items={
-            "lock_open":"hidden",
-            "lock_closed":"visible",
-            "cookie_cutter":"visible",
-            "mistletoe":"visible"
-        }
-
-        var scene_3_b_visible_items={
-            "potion_steam":"hidden", //Just for aesthetic purposes, shows the cauldron bubbling when the potion is complete.
-            "potion":"hidden",
-            "cookie_cutter":"visible",
-            "mistletoe":"visible"
-        }
-
-
-        var scene_4_visible_items={
-            "small_tree":"visible",
-            "lucky_star":"visible",
-            "complete_christmas_tree":"hidden",
-            "wreath":"visible"
-        }
+            }
+            var scene_2_visible_items={
+                "dough_in_bowl":"hidden",
+                "carrot":"visible",
+                "butter":"visible",
+                "sugar":"visible"
+            }
+            var scene_2b_visible_items={
+                "cookie_cutout_1":"hidden",
+                "cookie_cutout_2":"hidden",
+                "cookie_cutout_3":"hidden",
+                "cookie_cutout_4":"hidden",
+                "cookie_in_pan_1":"hidden",
+                "cookie_in_pan_2":"hidden",
+                "cookie_in_pan_3":"hidden",
+                "cookie_in_pan_4":"hidden",
+                "pan":"hidden",
+                "oven_door":"visible",
+            }
+            var scene_3_visible_items={
+                "lock_open":"hidden",
+                "lock_closed":"visible",
+                "cookie_cutter":"visible",
+                "mistletoe":"visible"
+            }
+            var scene_3_b_visible_items={
+                "potion_steam":"hidden", //Just for aesthetic purposes, shows the cauldron bubbling when the potion is complete.
+                "potion":"hidden",
+                "cookie_cutter":"visible",
+                "mistletoe":"visible"
+            }
+            var scene_4_visible_items={
+                "small_tree":"visible",
+                "lucky_star":"visible",
+                "complete_christmas_tree":"hidden",
+                "wreath":"visible"
+            }*/
 
 
         console.log(scene_1_visible_items);
@@ -65,6 +60,8 @@
         //"uncooked_cookies","cooked_cookies",
         // "key":["lock_closed",[show('lock_open')]], 
         // item id :[item id of object to click to activate, [function to call on click]]
+
+        // since this is static and never changes, doesn't need to be in the db
         const item_activation_dict={ 
             "carrot":["snowman",["show('complete_carrot_nose')","show('key')"]], 
             "key":["lock_closed",["show('lock_open')"]], 
@@ -160,11 +157,11 @@
         }
 
 
-        
+    
     </script>
     {{{body}}}
-
     <script>
+        console.log({{scene_1_visible_items}})
         load_items();
     </script>
 </div>

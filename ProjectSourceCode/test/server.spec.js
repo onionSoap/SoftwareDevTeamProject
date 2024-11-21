@@ -74,12 +74,12 @@ describe('Testing Update Item Status', () => {
   it('positive : /update_item_status', done => {
     chai
       .request(server)
-      .post('/update_item_status')
+      .patch('/update_item_status')
       // const {item_id, new_status} = req.body;
       .send({user_id: '1', item_id: '1', new_status: 'found'})
       .end((err, res) => {
         expect(res).to.have.status(200);
-        console.log("Res.text: ",res.text);
+        //console.log("Res.text: ",res.text);
         expect(res.text).to.include('Item status updated successfully!');
         done();
       });
@@ -87,7 +87,7 @@ describe('Testing Update Item Status', () => {
   it('Negative : /update_item_status. Checking invalid status', done => {
       chai
         .request(server)
-        .post('/update_item_status')
+        .patch('/update_item_status')
         .send({user_id: '1', item_id: '1', new_status: 'BigTester'})
         .end((err, res) => {
           expect(res).to.have.status(400);
@@ -95,23 +95,62 @@ describe('Testing Update Item Status', () => {
           done();
         });
     });
+    it('Positive : /update_item_status. Checking set to active works', done => {
+      chai
+        .request(server)
+        .patch('/update_item_status')
+        .send({user_id: '1', item_id: '2', new_status: 'active'})
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body.message).to.equals('Item status updated successfully!');
+          done();
+        });
+    });
+    it('Positive : /update_item_status. Checking swap to active works', done => {
+      chai
+        .request(server)
+        .patch('/update_item_status')
+        .send({user_id: '1', item_id: '1', new_status: 'active'})
+        .end((err, res) => {
+          expect(res).to.have.status(200);
+          expect(res.body.message).to.equals('Item status updated successfully!');
+          done();
+        });
+    });
 });
 
-describe('Testing update_is_solved', () => {
-  it('positive : /update_is_solved', done => {
+describe('Testing update_timer', () => {
+  it('positive : /update_timer', done => {
     chai
       .request(server)
-      .post('/update_is_solved')
+      .patch('/update_timer')
       // const {item_id, new_status} = req.body;
-      .send({user_id: '1', puzzle_id: '1', current_progress: '0'})
+      .send({user_id: '1', current_time: '00:01:02'})
       .end((err, res) => {
         expect(res).to.have.status(200);
         //console.log("Res.text: ",res.text);
-        expect(res.text).to.include('Puzzle was solved and progress updated successfully!');
+        expect(res.text).to.include('Timer was updated successfully!');
         done();
       });
   });
 });
+
+
+// describe('Testing update_is_solved', () => {
+//   it('positive : /update_is_solved', done => {
+//     chai
+//       .request(server)
+//       .post('/update_is_solved')
+//       // const {item_id, new_status} = req.body;
+//       .send({user_id: '1', puzzle_id: '1', current_progress: '0'})
+//       .end((err, res) => {
+//         expect(res).to.have.status(200);
+//         //console.log("Res.text: ",res.text);
+//         expect(res.text).to.include('Puzzle was solved and progress updated successfully!');
+//         done();
+//       });
+//   });
+// });
 
 describe('Testing Logout', () => {
   it('positive : /logout', done => {

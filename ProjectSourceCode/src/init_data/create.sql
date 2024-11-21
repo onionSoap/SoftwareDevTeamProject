@@ -50,20 +50,3 @@ CREATE TABLE scene_state (
     object VARCHAR(30) NOT NULL,
     visible_state VARCHAR(7) CHECK(visible_state IN('visible','hidden'))
 );
-
--- var scene_1_visible_items={
---             "antlers":"visible",
---             "complete_carrot_nose":"hidden",
---             "complete_christmas_lights":"hidden",
---             "complete_wreath":"hidden",
---             "key":"hidden",
---             "flour":"visible",
---             "christmas_lights":"visible"
---         }
-
--- CREATE TABLE game_state (
---     item_name VARCHAR(30) REFERENCES items(name) ON DELETE CASCADE,
---     item_to_click VARCHAR(30) NOT NULL,
---     actions TEXT[] NOT NULL,
-
--- );
