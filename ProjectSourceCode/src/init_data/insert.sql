@@ -15,7 +15,10 @@ INSERT INTO puzzles (name, value)
 VALUES
     ('Lock_and_key',34),
     ('Light_up_tree',33),
-    ('Open_the_present',33);
+    ('Open_the_present',33),
+    ('wreath',1),
+    ('carrot',1),
+    ('christmas_lights',1);
 
 -- users 1-3 with puzzles 1-3 all unsolved
 INSERT INTO users_puzzles (user_id, puzzle_id)
