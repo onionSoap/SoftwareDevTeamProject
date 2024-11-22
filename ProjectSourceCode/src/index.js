@@ -199,12 +199,31 @@ app.get('/page2', (req, res) => {
 });
 
 app.get('/page3', (req, res) => {
-  res.render('pages/page3', {user: req.session.user}); //this will call the /anotherRoute route in the API
-  res.render('pages/page3', {user: req.session.user}); //this will call the /anotherRoute route in the API
+  //res.render('pages/page3', {user: req.session.user}); //this will call the /anotherRoute route in the API
+  const sqlPage3 = "SELECT * FROM scene_state WHERE scene_number = '3';";
+  db.any(sqlPage3)
+  .then(data =>{
+    var scene_3_visible_items = data;
+    console.log("Scene_3...:",scene_3_visible_items)
+    res.render('pages/page3', {user: req.session.user, scene_3_visible_items: JSON.stringify(data)}); 
+  })
+  .catch(function (err){
+    res.status(400).send({message:"Failed to load page 3 from db data."});
+  });
 });
 
 app.get('/page4', (req, res) => {
-  res.render('pages/page4'); //this will call the /anotherRoute route in the API
+  // res.render('pages/page4'); //this will call the /anotherRoute route in the API
+  const sqlPage4 = "SELECT * FROM scene_state WHERE scene_number = '4';";
+  db.any(sqlPage4)
+  .then(data =>{
+    var scene_4_visible_items = data;
+    console.log("Scene_4...:",scene_4_visible_items)
+    res.render('pages/page4', {user: req.session.user, scene_4_visible_items: JSON.stringify(data)}); 
+  })
+  .catch(function (err){
+    res.status(400).send({message:"Failed to load page 4 from db data."});
+  });
 });
 
 app.get('/scoreboard', (req, res) => {

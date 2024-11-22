@@ -27,30 +27,23 @@ VALUES
     (2,2),
     (2,3);
 
--- items 1 set to unknown
--- update with all items Sofia sent one adding ONE item works :(
--- ["carrot","key","cookie_cutter","flour","sugar","butter","antlers","mistletoe","lucky_star","christmas_lights","wreath"];
+-- update this to inventory order
 INSERT INTO items (name)
 VALUES
     ('carrot'),
     ('key'), 
+    ('potion'),
     ('cookie_cutter'),
+    ('cooked_gingerbread_men'),
     ('flour'),
-    ('sugar'),
     ('butter'),
+    ('sugar'),
     ('antlers'),
     ('mistletoe'),
-    ('lucky_star'),
     ('christmas_lights'),
+    ('star'),
     ('wreath');
 
--- CREATE TABLE users_items (
---     user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
---     item_id INT REFERENCES puzzles(puzzle_id) ON DELETE CASCADE,
---     status VARCHAR(10) CHECK(status IN('unknown','found','active','disabled')) DEFAULT 'unknown',
---     PRIMARY KEY (user_id, item_id)
--- );
---only one item rn, two users populated by default
 INSERT INTO users_items (user_id, item_id)
 VALUES
     (1,1),
@@ -64,6 +57,8 @@ VALUES
     (1,9),
     (1,10),
     (1,11),
+    (1,12),
+    (1,13),
     (2,1),
     (2,2),
     (2,3),
@@ -74,11 +69,9 @@ VALUES
     (2,8),
     (2,9),
     (2,10),
-    (2,11);
-
--- CREATE_TABLE scenes (
---     scene_id VARCHAR(2) PRIMARY KEY
--- );
+    (2,11),
+    (2,12),
+    (2,13);
 
 INSERT INTO scenes (scene_id)
 VALUES
@@ -88,26 +81,7 @@ VALUES
     ('3'),
     ('3b'),
     ('4');
--- CREATE TABLE scene_state (
---     scene_number VARCHAR(2) PRIMARY KEY,
---     object VARCHAR(30) NOT NULL,
---     visible_state VARCHAR(7) CHECK(status IN('visible','hidden'))
--- );
--- var scene_1_visible_items={
---             "antlers":"visible",
---             "complete_carrot_nose":"hidden",
---             "complete_christmas_lights":"hidden",
---             "complete_wreath":"hidden",
---             "key":"hidden",
---             "flour":"visible",
---             "christmas_lights":"visible"
---             }
--- var scene_2_visible_items={
---                 "dough_in_bowl":"hidden",
---                 "carrot":"visible",
---                 "butter":"visible",
---                 "sugar":"visible"
---             }
+
 
 INSERT INTO scene_state (scene_number, object, visible_state)
 VALUES
@@ -121,5 +95,13 @@ VALUES
     ('2', 'dough_in_bowl', 'hidden'),
     ('2', 'carrot', 'visible'),
     ('2', 'butter', 'visible'),
-    ('2', 'sugar', 'visible');
-    -- add rest later
+    ('2', 'sugar', 'visible'),
+    ('3','lock_open','hidden'),
+    ('3','lock_closed','visible'),
+    ('3','cookie_cutter','visible'),
+    ('3','mistletoe','visible'),
+    ('4','small_tree','visible'),
+    ('4','lucky_star','visible'),
+    ('4','complete_christmas_tree','hidden'),
+    ('4','wreath','visible');
+    -- add rest later (2b and 3b)

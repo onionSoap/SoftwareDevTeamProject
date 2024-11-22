@@ -7,14 +7,6 @@ DROP TABLE IF EXISTS users_items;
 DROP TABLE IF EXISTS scenes;
 DROP TABLE IF EXISTS scene_state;
 -- need to make PostgresSQL not mySQL
-DROP TABLE IF EXISTS users_puzzles;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS puzzles;
-DROP TABLE IF EXISTS items;
-DROP TABLE IF EXISTS users_items;
-DROP TABLE IF EXISTS scenes;
-DROP TABLE IF EXISTS scene_state;
--- need to make PostgresSQL not mySQL
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(30) NOT NULL UNIQUE,
@@ -22,7 +14,6 @@ CREATE TABLE users (
     timer TIME DEFAULT '00:00:00',
     progress INT DEFAULT '0'
 );
--- removing these puzzle tables and changing the game to be "item status based" vs "puzzle status based" maybe...
 -- removing these puzzle tables and changing the game to be "item status based" vs "puzzle status based" maybe...
 CREATE TABLE puzzles (
     puzzle_id SERIAL PRIMARY KEY,

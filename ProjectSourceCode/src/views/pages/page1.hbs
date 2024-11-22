@@ -4,24 +4,16 @@
     {{> scene1 }}
 
     {{#if scene_1_visible_items}}
-        <p> hello!</p>
-
+        {{!-- <p> hello!</p> --}}
+        {{!-- console.log(items); --}}
         <script>
             var items = ({{{scene_1_visible_items}}});
-            console.log(items);
             items.forEach((obj, i) => {
-                document.getElementById(obj.object).style.visibility = obj.visible_state;//console.log(obj.visible_state, i);
+                document.getElementById(obj.object).style.visibility = obj.visible_state;
             })
         </script>
     {{/if}}
 
     </svg>
-
-    {{!-- <script>
-        console.log({{scene_1_visible_items}})
-        for(let item in scene_1_visible_items){
-            document.getElementById(item).style.visibility = scene_1_visible_items[item];
-        }
-    </script> --}}
 
 </div>
