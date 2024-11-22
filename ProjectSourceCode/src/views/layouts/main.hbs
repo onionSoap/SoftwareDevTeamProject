@@ -51,8 +51,6 @@
                 "wreath":"visible"
             }*/
 
-
-        console.log(scene_1_visible_items);
         var current_active_item = "wreath"; //TODO: When the item is clicked in the inventory, set it to the current_active_item
         const pickupable_item_ids=["carrot","key","cookie_cutter",
         "flour","sugar","butter","antlers",
@@ -79,13 +77,11 @@
         };
 
         function hide(id){
-            console.log(scene_1_visible_items);
             document.getElementById(id).style.visibility = "hidden";
             scene_1_visible_items[id] = "hidden";
         }
 
         function show(id){
-            console.log(scene_1_visible_items);
             document.getElementById(id).style.visibility = "visible";
             scene_1_visible_items[id] = "visible";
         }
