@@ -206,6 +206,10 @@ app.get('/page3', (req, res) => {
 app.get('/page4', (req, res) => {
   res.render('pages/page4'); //this will call the /anotherRoute route in the API
 });
+
+app.get('/scoreboard', (req, res) => {
+  res.render('pages/scoreboard'); //this will call the /anotherRoute route in the API
+});
 //These moved below middleware bc only logged-in users should be able to do these actions. For testing purposes, move ABOVE middleware!
 
 //READ UPPERCASE COMMENTS CLOSELY 

@@ -11,7 +11,6 @@ VALUES
 
 -- puzzles 1-3, values at 33,33, and 34 (total 100)
 -- update with Sofia's puzzles
--- update with Sofia's puzzles
 INSERT INTO puzzles (name, value)
 VALUES
     ('Lock_and_key',34),
@@ -111,94 +110,12 @@ VALUES
 --             }
 
 INSERT INTO scene_state (scene_number, object, visible_state)
--- update with all items Sofia sent one adding ONE item works :(
--- ["carrot","key","cookie_cutter","flour","sugar","butter","antlers","mistletoe","lucky_star","christmas_lights","wreath"];
-INSERT INTO items (name)
-VALUES
-    ('carrot'),
-    ('key'), 
-    ('cookie_cutter'),
-    ('flour'),
-    ('sugar'),
-    ('butter'),
-    ('antlers'),
-    ('mistletoe'),
-    ('lucky_star'),
-    ('christmas_lights'),
-    ('wreath');
-
--- CREATE TABLE users_items (
---     user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
---     item_id INT REFERENCES puzzles(puzzle_id) ON DELETE CASCADE,
---     status VARCHAR(10) CHECK(status IN('unknown','found','active','disabled')) DEFAULT 'unknown',
---     PRIMARY KEY (user_id, item_id)
--- );
---only one item rn, two users populated by default
-INSERT INTO users_items (user_id, item_id)
-VALUES
-    (1,1),
-    (1,2),
-    (1,3),
-    (1,4),
-    (1,5),
-    (1,6),
-    (1,7),
-    (1,8),
-    (1,9),
-    (1,10),
-    (1,11),
-    (2,1),
-    (2,2),
-    (2,3),
-    (2,4),
-    (2,5),
-    (2,6),
-    (2,7),
-    (2,8),
-    (2,9),
-    (2,10),
-    (2,11);
-
--- CREATE_TABLE scenes (
---     scene_id VARCHAR(2) PRIMARY KEY
--- );
-
-INSERT INTO scenes (scene_id)
-VALUES
-    ('1'),
-    ('2'),
-    ('2b'),
-    ('3'),
-    ('3b'),
-    ('4');
--- CREATE TABLE scene_state (
---     scene_number VARCHAR(2) PRIMARY KEY,
---     object VARCHAR(30) NOT NULL,
---     visible_state VARCHAR(7) CHECK(status IN('visible','hidden'))
--- );
--- var scene_1_visible_items={
---             "antlers":"visible",
---             "complete_carrot_nose":"hidden",
---             "complete_christmas_lights":"hidden",
---             "complete_wreath":"hidden",
---             "key":"hidden",
---             "flour":"visible",
---             "christmas_lights":"visible"
---             }
--- var scene_2_visible_items={
---                 "dough_in_bowl":"hidden",
---                 "carrot":"visible",
---                 "butter":"visible",
---                 "sugar":"visible"
---             }
-
-INSERT INTO scene_state (scene_number, object, visible_state)
 VALUES
     ('1','antlers','visible'),
     ('1','complete_carrot_nose', 'hidden'),
     ('1','complete_christmas_lights', 'hidden'),
     ('1','complete_wreath', 'hidden'),
-    ('1','key','visible'),
+    ('1','key','hidden'),
     ('1','flour','visible'),
     ('1','christmas_lights','visible'),
     ('2', 'dough_in_bowl', 'hidden'),
