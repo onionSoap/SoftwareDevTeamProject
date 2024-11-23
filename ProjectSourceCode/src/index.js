@@ -177,7 +177,7 @@ app.get('/page1', (req, res) => {
   db.any(sqlPage1)
   .then(data =>{
     var scene_1_visible_items = data;
-    console.log("Scene_1...:",scene_1_visible_items)// ", and Scene_1_Visible_Items: ", scene_1_visible_items
+    //console.log("Scene_1...:",scene_1_visible_items)// ", and Scene_1_Visible_Items: ", scene_1_visible_items
     res.render('pages/page1', {user: req.session.user, scene_1_visible_items: JSON.stringify(data)}); 
   })
   .catch(function (err){
@@ -191,7 +191,7 @@ app.get('/page2', (req, res) => {
   db.any(sqlPage2)
   .then(data =>{
     var scene_2_visible_items = data;
-    console.log("Scene_2...:",scene_2_visible_items)
+    //console.log("Scene_2...:",scene_2_visible_items)
     res.render('pages/page2', {user: req.session.user, scene_2_visible_items: JSON.stringify(data)}); 
   })
   .catch(function (err){
@@ -205,7 +205,7 @@ app.get('/page3', (req, res) => {
   db.any(sqlPage3)
   .then(data =>{
     var scene_3_visible_items = data;
-    console.log("Scene_3...:",scene_3_visible_items)
+    //console.log("Scene_3...:",scene_3_visible_items)
     res.render('pages/page3', {user: req.session.user, scene_3_visible_items: JSON.stringify(data)}); 
   })
   .catch(function (err){
@@ -219,7 +219,7 @@ app.get('/page4', (req, res) => {
   db.any(sqlPage4)
   .then(data =>{
     var scene_4_visible_items = data;
-    console.log("Scene_4...:",scene_4_visible_items)
+    //console.log("Scene_4...:",scene_4_visible_items)
     res.render('pages/page4', {user: req.session.user, scene_4_visible_items: JSON.stringify(data)}); 
   })
   .catch(function (err){
@@ -234,33 +234,49 @@ app.get('/scoreboard', (req, res) => {
 
 //READ UPPERCASE COMMENTS CLOSELY 
 //update this to PATCH not POST
-app.patch('/update_item_status', async (req, res) => {
-  const {user_id, item_id, new_status} = req.body;
+app.patch('/update_item_status', (req, res) => {
+  // const {user_id, item_id, new_status} = req.body;
   // FOR TESTING PURPOSES, vTHISv IS COMMENTED OUT. ONCE TESTING IS CONCLUDED (aka, docker-compose.yaml set to npm start vs npm run tests) 
   // UNCOMMENT AND REMOVE user_id FROM ABOVE LINE.
-  // const user_id = req.session.user.user_id
-  // const valid_status = ['unknown','found','active','inactive'];
-  // if(!valid_status.includes(new_status)){
-  //   res.status(400).send({error: 'Item Status Update Error!'});
-  // }
-  try{
-    if(new_status == 'active'){
-      const sqlFindActive = "SELECT * FROM users_items WHERE user_id = $1 AND status = 'active'";
-      const current_active = await db.any(sqlFindActive, [user_id]);
-      if(current_active.length > 0){ //aka, if the array is not empty (should only be 1 tho)
-        const sqlChangeActive = "UPDATE users_items SET status = 'found' WHERE user_id = $1 AND item_id = $2";
-        await db.none(sqlChangeActive, [user_id, current_active[0].item_id]);
-      }
-    }
-    const sql_item_update = 'UPDATE users_items SET status = $1 WHERE user_id = $2 AND item_id = $3';
-    await db.none(sql_item_update, [new_status, user_id, item_id]);
-    res.status(200).send({message:"Item status updated successfully!"});
-  }
-  //error if unable to
-  catch (error){
-    console.error('Error updating item status: ', error);
+  const {item_name, new_status} = req.body;
+  const user_id = req.session.user.user_id;
+  const valid_status = ['unknown','found','active','inactive'];
+  if(!valid_status.includes(new_status)){
     res.status(400).send({error: 'Item Status Update Error!'});
   }
+
+  //Find item id:
+  const sql_get_puzzle_id =`SELECT item_id FROM items WHERE name = '${item_name}';`;
+  db.many(sql_get_puzzle_id).then(async function(data){
+    const item_id = data[0].item_id;
+    console.log(item_id);
+
+    //Update item status:
+    try{
+      if(new_status == 'active'){
+        const sqlFindActive = "SELECT * FROM users_items WHERE user_id = $1 AND status = 'active';";
+        const current_active = await db.any(sqlFindActive, [user_id]);
+        if(current_active.length > 0){ //aka, if the array is not empty (should only be 1 tho)
+          const sqlChangeActive = "UPDATE users_items SET status = 'found' WHERE user_id = $1 AND item_id = $2;";
+          await db.none(sqlChangeActive, [user_id, current_active[0].item_id]);
+        }
+      }
+      const sql_item_update = "UPDATE users_items SET status = $1 WHERE user_id = $2 AND item_id = $3;";
+      await db.none(sql_item_update, [new_status, user_id, item_id]);
+      res.status(200).send({message:"Item status updated successfully!"}); 
+    }
+    //error if unable to
+    catch (error){
+      console.error('Error updating item status: ', error);
+      res.status(400).send({error: 'Item Status Update Error!'});
+    }
+
+  }).catch(error => {
+    console.error('Item does not exist: ', error);
+    res.status(400).send({error: 'Item with this name does not exist.'});
+  });
+
+  
 });
 
 app.post('/update_is_solved', async (req, res) => {
