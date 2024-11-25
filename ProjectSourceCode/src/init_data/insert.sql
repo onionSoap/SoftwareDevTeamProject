@@ -106,5 +106,18 @@ VALUES
     ('4','small_tree','visible'),
     ('4','lucky_star','visible'),
     ('4','complete_christmas_tree','hidden'),
-    ('4','wreath','visible');
-    -- add rest later (2b and 3b)
+    ('4','wreath','visible'),
+    ('3b','potion_steam','hidden'),
+    ('3b','potion','hidden'),
+    ('3b','cookie_cutter','visible'),
+    ('3b','mistletoe','visible'),
+    ('2b','cookie_cutout_1','hidden'),
+    ('2b','cookie_cutout_2','hidden'),
+    ('2b','cookie_cutout_3','hidden'),
+    ('2b','cookie_cutout_4','hidden'),
+    ('2b','cookie_in_pan_1','hidden'),
+    ('2b','cookie_in_pan_2','hidden'),
+    ('2b','cookie_in_pan_3','hidden'),
+    ('2b','cookie_in_pan_4','hidden'),
+    ('2b','pan','hidden'),
+    ('2b','oven_door','visible');
