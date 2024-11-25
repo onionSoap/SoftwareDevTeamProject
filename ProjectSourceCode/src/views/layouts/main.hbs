@@ -51,6 +51,8 @@
                 "wreath":"visible"
             }*/
 
+        //TODO: add carrot to scene_2_b incase user hasn't picked it up yet
+
         var current_active_item = "wreath";
         const pickupable_item_ids=["carrot","key","cookie_cutter",
         "flour","sugar","butter","antlers",
@@ -84,6 +86,37 @@
         function show(id){
             document.getElementById(id).style.visibility = "visible";
             //TODO: update database
+        }
+
+        /*               -increment_dough_counter()
+                    :
+                        -add 1 to the internal counter, once the counter reaches 3 change scene to scene2_2. 
+                        -Once the increment is 1
+                        -change the '0/3' dough_counter_text to reflect counter
+                
+                -increment_cookie_in_pan()
+                    : 
+
+                -increment_cookie_cutout()
+                    : 
+
+                -increment_potion_counter() 
+                    : 
+                        -add 1 to the internal counter, once the counter reaches 3, show potion_steam and potion 
+                        -change the '0/3' potion_counter_text to reflect counter */
+        
+        function increment_dough_counter(){
+            dough_counter = document.getElementById('dough_counter_text'); //Text that says '0/3' initially.
+            counter = dough_counter.textContent[0]; 
+            if(counter == 3){
+                //TODO: change scene. not sure how to do this. maybe with session variabless?
+            } else {
+                counter++;
+                dough_counter.textContent = counter+"/3";
+            }
+            if (counter ==1) {
+                show('dough_in_bowl');
+            }
         }
 
         function pickup(id){
