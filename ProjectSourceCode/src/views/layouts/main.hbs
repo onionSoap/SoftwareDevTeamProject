@@ -130,6 +130,7 @@
                         selectable_item.addEventListener("click", () => {
                             pickup(pickupable_item_ids[i]); 
                         });
+                        selectable_item.classList.add('glow-effect');
                     });
 
                 }
@@ -161,21 +162,6 @@
                 }
             }
             
-            
-            /*TODO: 
-
-            Make the functions: 
-                -increment_cookie_in_pan()
-                    : 
-
-                -increment_cookie_cutout()
-                    : 
-
-                -increment_potion_counter() 
-                    : 
-                        -add 1 to the internal counter, once the counter reaches 3, show potion_steam and potion 
-                        -change the '0/3' potion_counter_text to reflect counter
-            */
         }    
     </script>
 
