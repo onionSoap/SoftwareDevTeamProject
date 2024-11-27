@@ -2,14 +2,25 @@
 
     {{> svgsettings}}
     {{> scene2 }}
+    {{> scene2_b }}
 
     {{#if scene_2_visible_items}}
-        {{!-- <p> hello!</p> --}}
-        {{!-- console.log(items); --}}
         <script>
             var items = ({{{scene_2_visible_items}}});
+            //this is kind of horrible but it works
             items.forEach((obj, i) => {
-                document.getElementById(obj.object).style.visibility = obj.visible_state;
+                if (obj.scene_number == '2b' && obj.object == 'scene2_b'){
+                        if (obj.visible_state == 'hidden'){
+                            document.getElementById("scene2_b").style.visibility = "hidden";
+                            document.getElementById("scene2").style.visibility = "visible";
+                        } else {
+                            document.getElementById("scene2_b").style.visibility = "visible";
+                            document.getElementById("scene2").style.visibility = "hidden";
+                        }
+                }
+                if (obj.object != 'entire_scene'){
+                    document.getElementById(obj.object).style.visibility = obj.visible_state;
+                }
             })
         </script>
     {{/if}}
@@ -17,3 +28,4 @@
     </svg>
 
 </div>
+

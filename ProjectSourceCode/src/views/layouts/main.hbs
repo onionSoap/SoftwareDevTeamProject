@@ -1,70 +1,22 @@
 {{>header}}
 
+<!--TODO: there's currently an issue with axios sending several requests at once... this is not working. Options are:
+    - figure out how to get async/await working
+    - use cookies to store all of this data, & a save button? -->
 
 <div class="non-header">
 
     <script>
-        /*
-            var scene_1_visible_items={
-            "antlers":"visible",
-            "complete_carrot_nose":"hidden",
-            "complete_christmas_lights":"hidden",
-            "complete_wreath":"hidden",
-            "key":"hidden",
-            "flour":"visible",
-            "christmas_lights":"visible"
-            }
-            var scene_2_visible_items={
-                "dough_in_bowl":"hidden",
-                "carrot":"visible",
-                "butter":"visible",
-                "sugar":"visible"
-            }
-            var scene_2b_visible_items={
-                "cookie_cutout_1":"hidden",
-                "cookie_cutout_2":"hidden",
-                "cookie_cutout_3":"hidden",
-                "cookie_cutout_4":"hidden",
-                "cookie_in_pan_1":"hidden",
-                "cookie_in_pan_2":"hidden",
-                "cookie_in_pan_3":"hidden",
-                "cookie_in_pan_4":"hidden",
-                "pan":"hidden",
-                "oven_door":"visible",
-            }
-            var scene_3_visible_items={
-                "lock_open":"hidden",
-                "lock_closed":"visible",
-                "cookie_cutter":"visible",
-                "mistletoe":"visible"
-            }
-            var scene_3_b_visible_items={
-                "potion_steam":"hidden", //Just for aesthetic purposes, shows the cauldron bubbling when the potion is complete.
-                "potion":"hidden",
-                "cookie_cutter":"visible",
-                "mistletoe":"visible"
-            }
-            var scene_4_visible_items={
-                "small_tree":"visible",
-                "lucky_star":"visible",
-                "complete_christmas_tree":"hidden",
-                "wreath":"visible"
-            }*/
-
-        //TODO: add carrot to scene_2_b incase user hasn't picked it up yet
-
-        var current_active_item = "wreath";
+        var current_active_item = null;
         const pickupable_item_ids=["carrot","key","cookie_cutter",
         "flour","sugar","butter","antlers",
         "mistletoe","lucky_star","christmas_lights","wreath","potion"];
         //"uncooked_cookies","cooked_cookies",
-        // "key":["lock_closed",[show('lock_open')]], 
-        // item id :[item id of object to click to activate, [function to call on click]]
 
-        // since this is static and never changes, doesn't need to be in the db
+        // item id :[item id of object to click to activate, [function to call on click]]
         const item_activation_dict={ 
             "carrot":["snowman",["show('complete_carrot_nose')","show('key')"]], 
-            "key":["lock_closed",["hide('lock_closed')","show('lock_open')"]], 
+            "key":["lock_closed",["hide('lock_closed')","show('lock_open')","show_3b()"]], 
             "cookie_cutter":["cookie_dough", ["increment_cookie_cutout()"]],
             "uncooked_cookies":["pan", ["increment_cookie_in_pan()"]],
             "sugar":["dough_bowl",["increment_dough_counter()"]],
@@ -79,12 +31,18 @@
         };
 
         function hide(id){
-            document.getElementById(id).style.visibility = "hidden";
-            //TODO: update database
+            elements = document.querySelectorAll(`[id=${id}]`);
+            elements.forEach((found_item)=>{ //In case there are multiple of the same item shown across many scenes (for example scene 3 & scene3b)
+                found_item.style.visibility = "hidden";
+            });
+            //TODO: update database with item id as the item name, and set it to hidden
         }
 
         function show(id){
-            document.getElementById(id).style.visibility = "visible";
+            elements = document.querySelectorAll(`[id=${id}]`); 
+            elements.forEach((found_item)=>{
+                found_item.style.visibility = "visible";
+            });
             //TODO: update database
         }
 
@@ -105,17 +63,28 @@
                         -add 1 to the internal counter, once the counter reaches 3, show potion_steam and potion 
                         -change the '0/3' potion_counter_text to reflect counter */
         
+        function show_2b(){
+            show("scene2_b");
+            document.getElementById("scene2").style.visibility = "hidden";
+
+        }
+
+        function show_3b(){
+            show("scene3_b"); 
+            document.getElementById("scene3").style.visibility = "hidden";
+
+        }
+
         function increment_dough_counter(){
             dough_counter = document.getElementById('dough_counter_text'); //Text that says '0/3' initially.
             counter = dough_counter.textContent[0]; 
-            if(counter == 3){
-                //TODO: change scene. not sure how to do this. maybe with session variabless?
-            } else {
-                counter++;
-                dough_counter.textContent = counter+"/3";
-            }
+            counter++;
+            dough_counter.textContent = counter+"/3";
             if (counter ==1) {
                 show('dough_in_bowl');
+            }
+            if(counter == 3){
+                show_2b();
             }
         }
 
@@ -127,7 +96,7 @@
                 new_status:"found"
             })
             .then((response) => {
-                console.log(response.data);
+                //console.log(response.data);
                 //INVENTORY TODO: update inventory here, make the item 'found'!
             })
             .then((error) => console.log(error));
@@ -137,21 +106,25 @@
             axios.post("update_is_solved", {
                 name : id
             })
-            .then((response) => console.log(response.data))
+            .then((response) => console.log(response))
             .then((error) => console.log(error));
         }
 
         function load_items(){
             //Make all inventory items pickupable:
             for (let i in pickupable_item_ids){
-                var element = null;
+                var elements = null;
                 try{
-                    element = document.getElementById(pickupable_item_ids[i]);
-                }catch(error){}
-                if(element){
-                    element.addEventListener("click", () => {
-                        pickup(pickupable_item_ids[i]);
+                    elements = document.querySelectorAll(`[id=${pickupable_item_ids[i]}]`);
+                }catch(error){} 
+
+                if(elements){
+                    elements.forEach((selectable_item)=>{ //in case there are several items with the same id, for example in scene 3 and scene 3b.
+                        selectable_item.addEventListener("click", () => {
+                            pickup(pickupable_item_ids[i]); 
+                        });
                     });
+
                 }
             }
             
@@ -173,6 +146,7 @@
                                 eval(item_activation_dict[key][1][index]);
                             }
                             update_progress(key);
+
                             //INVENTORY TODO: update the inventory status of the item with the 'key' id to be 'disabled', 
                             //then update the database with this new status.
                         }
@@ -184,12 +158,6 @@
             /*TODO: 
 
             Make the functions: 
-                -increment_dough_counter()
-                    :
-                        -add 1 to the internal counter, once the counter reaches 3 change scene to scene2_2. 
-                        -Once the increment is 1
-                        -change the '0/3' dough_counter_text to reflect counter
-                
                 -increment_cookie_in_pan()
                     : 
 
@@ -201,8 +169,7 @@
                         -add 1 to the internal counter, once the counter reaches 3, show potion_steam and potion 
                         -change the '0/3' potion_counter_text to reflect counter
             */
-        }
-    
+        }    
     </script>
 
     {{{body}}}

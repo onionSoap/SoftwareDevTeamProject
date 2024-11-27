@@ -13,12 +13,19 @@ VALUES
 -- update with Sofia's puzzles
 INSERT INTO puzzles (name, value)
 VALUES
-    ('Lock_and_key',34),
-    ('Light_up_tree',33),
-    ('Open_the_present',33),
-    ('wreath',1),
-    ('carrot',1),
-    ('christmas_lights',1);
+    ('carrot', 1),
+    ('key', 1),
+    ('cookie_cutter', 1),
+    ('uncooked_cookies', 1),
+    ('sugar', 1),
+    ('butter', 1),
+    ('flour', 1),
+    ('antlers', 1),
+    ('mistletoe', 1),
+    ('lucky_star', 1),
+    ('potion', 1),
+    ('christmas_lights', 1),
+    ('wreath', 1);
 
 -- users 1-3 with puzzles 1-3 all unsolved
 INSERT INTO users_puzzles (user_id, puzzle_id)
@@ -107,10 +114,12 @@ VALUES
     ('4','lucky_star','visible'),
     ('4','complete_christmas_tree','hidden'),
     ('4','wreath','visible'),
+    ('3b','scene3_b','hidden'), --the entire scene b
     ('3b','potion_steam','hidden'),
     ('3b','potion','hidden'),
     ('3b','cookie_cutter','visible'),
     ('3b','mistletoe','visible'),
+    ('2b','scene2_b','hidden'), --the entire scene b
     ('2b','cookie_cutout_1','hidden'),
     ('2b','cookie_cutout_2','hidden'),
     ('2b','cookie_cutout_3','hidden'),

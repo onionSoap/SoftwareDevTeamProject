@@ -106,7 +106,7 @@ app.post('/login', async (req, res) => {
         req.session.user = user;
         req.session.save();
         res.status(200);
-        res.redirect('/page1')
+        res.redirect('/page4')
       }
   
       else{
@@ -187,7 +187,7 @@ app.get('/page1', (req, res) => {
 
 app.get('/page2', (req, res) => {
   //res.render('pages/page2', {user: req.session.user}); //this will call the /anotherRoute route in the API
-  const sqlPage2 = "SELECT * FROM scene_state WHERE scene_number = '2';";
+  const sqlPage2 = "SELECT * FROM scene_state WHERE scene_number = '2' OR scene_number = '2b';";
   db.any(sqlPage2)
   .then(data =>{
     var scene_2_visible_items = data;
@@ -199,14 +199,14 @@ app.get('/page2', (req, res) => {
   });
 });
 
+
 app.get('/page3', (req, res) => {
   //res.render('pages/page3', {user: req.session.user}); //this will call the /anotherRoute route in the API
-  const sqlPage3 = "SELECT * FROM scene_state WHERE scene_number = '3';";
+  const sqlPage3 = "SELECT * FROM scene_state WHERE scene_number = '3' OR scene_number = '3b';";
   db.any(sqlPage3)
   .then(data =>{
     var scene_3_visible_items = data;
-    //console.log("Scene_3...:",scene_3_visible_items)
-    res.render('pages/page3', {user: req.session.user, scene_3_visible_items: JSON.stringify(data)}); 
+    res.render('pages/page3', {user: req.session.user, scene_3_visible_items: JSON.stringify(data), scene3b:req.session.user.page3b}); 
   })
   .catch(function (err){
     res.status(400).send({message:"Failed to load page 3 from db data."});
@@ -226,6 +226,7 @@ app.get('/page4', (req, res) => {
     res.status(400).send({message:"Failed to load page 4 from db data."});
   });
 });
+
 
 app.get('/scoreboard', (req, res) => {
   res.render('pages/scoreboard'); //this will call the /anotherRoute route in the API
@@ -249,7 +250,7 @@ app.patch('/update_item_status', (req, res) => {
   const sql_get_puzzle_id =`SELECT item_id FROM items WHERE name = '${item_name}';`;
   db.many(sql_get_puzzle_id).then(async function(data){
     const item_id = data[0].item_id;
-    console.log(item_id);
+    //console.log(item_id);
 
     //Update item status:
     try{
@@ -282,8 +283,8 @@ app.patch('/update_item_status', (req, res) => {
 app.post('/update_is_solved', async (req, res) => {
   const name = req.body.name;
   const user_id = req.session.user.user_id;
-  
-  console.log(req.body);
+
+  //console.log(req.body);
   //Find the puzzle id:
   const sql_get_puzzle_id =`SELECT puzzle_id FROM puzzles WHERE name = '${name}';`;
   db.many(sql_get_puzzle_id).then(data => {
