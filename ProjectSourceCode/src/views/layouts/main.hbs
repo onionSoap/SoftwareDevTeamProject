@@ -8,23 +8,22 @@
 
     <script>
         var current_active_item = null;
-        const pickupable_item_ids=["carrot","key","cookie_cutter",
+        const pickupable_item_ids=["carrot","key","cookie_cutter","cookies",
         "flour","sugar","butter","antlers",
         "mistletoe","lucky_star","christmas_lights","wreath","potion"];
-        //"uncooked_cookies","cooked_cookies",
 
         // item id :[item id of object to click to activate, [function to call on click]]
         const item_activation_dict={ 
             "carrot":["snowman",["show('complete_carrot_nose')","show('key')"]], 
             "key":["lock_closed",["hide('lock_closed')","show('lock_open')","show_3b()"]], 
-            "cookie_cutter":["cookie_dough", ["increment_cookie_cutout()"]],
-            "uncooked_cookies":["pan", ["increment_cookie_in_pan()"]],
+            "cookie_cutter":["cookie_dough", ["show('cookie_cutouts')","show('pan')","hide('oven_door')","show('cookies')"]],
             "sugar":["dough_bowl",["increment_dough_counter()"]],
             "butter":["dough_bowl",["increment_dough_counter()"]],
             "flour":["dough_bowl",["increment_dough_counter()"]],
             "antlers":["cauldron",["increment_potion_counter()"]],
             "mistletoe":["cauldron",["increment_potion_counter()"]],
             "lucky_star":["cauldron",["increment_potion_counter()"]],
+            "cookies":["cauldron",["increment_potion_counter()"]],
             "potion":["small_tree",["hide('small_tree')","show('complete_christmas_tree')"]],
             "christmas_lights":["house",["show('complete_christmas_lights')"]],
             "wreath":["house",["show('complete_wreath')"]]
@@ -46,12 +45,7 @@
             //TODO: update database
         }
 
-        /*               -increment_dough_counter()
-                    :
-                        -add 1 to the internal counter, once the counter reaches 3 change scene to scene2_2. 
-                        -Once the increment is 1
-                        -change the '0/3' dough_counter_text to reflect counter
-                
+        /*             
                 -increment_cookie_in_pan()
                     : 
 
@@ -88,6 +82,19 @@
             }
         }
 
+        function increment_potion_counter(){
+            potion_counter = document.getElementById('potion_counter_text'); //Text that says '0/3' initially.
+            counter = potion_counter.textContent[0]; 
+            counter++;
+            potion_counter.textContent = counter+"/4";
+            if (counter ==1) {
+                show('potion_steam');
+            }
+            if(counter == 4){
+                show('potion');
+            }
+        }
+ 
         function pickup(id){
             hide(id);
             current_active_item = id;
