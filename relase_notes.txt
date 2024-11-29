@@ -1,0 +1,78 @@
+10/26/2024 : Sofia tests using HTML canvas to render the game.
+10/28/2024 : Emily created the project directories based on the project writeup (may change as project develops)
+10/31/2024 : Emily wrote the CREATE TABLES for the website to function and the INSERT statements for dummy data : NOT TESTED 
+10/31/2024 : 
+            - Dorjee sets up docker, creates a docker file
+            - Emily writes CREATE/INSERT statements for database. 
+            - Emily adds login get/post. 
+            - Sofia decides the way the game will be rendered, will use SVG's.
+11/02/2024 : Sofia creates a demo game view. 
+11/04/2024 : 
+            - Leo creates the frontend for the login page.
+            - Dorjee creates a prototype frontend scoreboard page. 
+            - Emily implements header, footer, & restructures CSS 
+            - Sofia demos acquiring and using an item. 
+            - Sofia fixes css styling conflict. 
+11/05/2024 : 
+            - Emily implements header, footer, & restructures CSS 
+            - Sofia & Emily integrate the login page, header and footer. 
+            - Dorjee fully implements the backend of the scoreboard with dummy data to display the top 10 player scores.
+            - Leo creates plans for the gameplay of the four final scenes.
+11/06/2024: 
+            - Emily integrates the database with index.js, the server is now functional. 
+11/07/2024:
+            - Leo creates the frontend for the register page.
+            - Emily creates the tests for lab 11, including for /register.
+            - Sofia creates and implements final SVG's for page 1 and page 2. 
+11/08/2024: Sofia creates SVG's for page 3 and 4. 
+11/10/2024: 
+            - Emily creates a post request /update_item_status that updates the item's 'found/disabled/etc.' status in the database.
+            - Sofia uploads the UAT test plan that she, Dorjee and Leo made. 
+11/11/2024: 
+            - Emily implmenets the backend for the login and register pages, but it's not fully integrated with the frontend. 
+            - Dorjee restyles the scoreboard and implements displaying data. 
+11/12/2024: 
+            - Dorjee creates a fully functional inventory hotbar.
+            - Dorjee creates a fully functional timer that counts down as the user plays. 
+11/13/2024: 
+            - Emily makes the header display user info like progress and username. 
+            - Emily creates more tests.
+            - Emily fixes /update_item_status.
+11/17/2024:
+            - Sofia adds endpoints for pages 1-4.
+            - Sofia implements the 'pickup' gameplay functionality, the code dynamically adds on-click event listeners to all possible pickupable items.
+            - Sofia implements the 'solve puzzles' gameplay functionality, the code dynamically adds on-click event listeners to all possible solvable 
+            puzzles and 'completes' the puzzle if the user is holding the correct item.
+11/18/2024: 
+            - Sofia hides and shows all necessary items with a dict, to be replaced with the database.
+            - Emily updated the DB to include the users_items table
+            - Emily added all items the INSERT statements
+            - Emily made it so register populates users_puzzles and users_items now
+            - Emily completed all tests for update_item_status and update_is_solved, they now passed. 
+            - Dorjee adds temporary objects to the inventory.
+11/19/2024:
+            - Dorjee updates the inventory with all the pickupable objects in the game.
+            - Dorjee adds drop shadows and special effects to the inventory when items are hovered over.
+            - Dorjee updates the timer to function more like a stopwatch, also adds a temporary stop button.
+            - Emily updates the header to call information from the database.
+            - Emily updates index.js, including adding the post request /update_is_solved and the authentication middleware.
+11/20/2024: 
+            - Sofia integrates the inventory with the game.
+            - Sofia implements using objects from the inventory to solve puzzles.
+11/21/2024:
+            - Sofia deploys the website online using render. 
+            - Sofia updates /update_is_solved to take the item name instead of internal database id, and to only increment the progress by 1.
+            - Sofia integrates solving puzzles with the database (solving a puzzle sends the /update_is_solved request with the corresponding puzzle name).
+            - Emily updates the database with all images that will be visible/hidden when each page is loaded up. 
+            - Emily makes all game pages load their document elements with the correct visible/hidden statuses by reading from the database. 
+            - Emily creates a get request for /all_current_item_status to be usable by the inventory.
+            - Emily updates /update_item_status to be usable by the inventory.
+11/23/2024: Sofia makes picking up items send the /update_item_status request, updating the item's status to 'found' in the database.
+11/25/2024:
+            - Sofia implements the 'create cookie dough' puzzle.
+            - Sofia updates the database with the visible items for scenes 2b and 3b.
+11/26/2024 : Sofia implements changing scenes between 2, 2b and 3, 3b.
+11/27/2024 : 
+            - Sofia implements the 'brew a potion' puzzle. 
+            - Sofia adds a glow effect on hover to pickupable items. 
+11/29/2024 : Sofia created a 'complete game' screen and made progress increment while user is playing, so the game can be completed now. 
