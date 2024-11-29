@@ -127,6 +127,11 @@ app.get('/register', (req, res) => {
   res.render('pages/register');
 });
 
+app.get('/game_complete', (req, res) => {
+  res.render('pages/game_complete');
+});
+
+
 //from lab 8
 app.post('/register', async (req, res) => {
   //hash the password using bcrypt library
