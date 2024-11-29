@@ -16,7 +16,7 @@
         <div class="first-tier">
             {{#if user}}
                 <div class="username_head">Username: <span>{{user.username}}</span></div>
-                <div class="progress_head">Progress: <span>{{user.progress}}</span></div>
+                <div class="progress_head">Progress: <span id = "progress_display">{{user.progress}}/13</span></div>
                 <div class="timer_head">Timer: <span>{{user.timer}}</span></div>
             {{else}}
                 <div class="username_head">Username: <span>N/A</span></div>

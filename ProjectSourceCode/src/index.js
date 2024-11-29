@@ -90,8 +90,8 @@ app.post('/login', async (req, res) => {
     
     try{
       //async + await make it so that I don't need to do .then(data etc..) which makes the code cleaner and work more efficiently. 
-      const user = await db.one(sqlUsername, [username])
-      const match = await bcrypt.compare(password, user.password)
+      const user = await db.one(sqlUsername, [username]);
+      const match = await bcrypt.compare(password, user.password);
   
       //looks like there's a space for some reason? Why tho...?
       // console.log("Username is:", username, ", Other username is:", user.username);
@@ -106,7 +106,7 @@ app.post('/login', async (req, res) => {
         req.session.user = user;
         req.session.save();
         res.status(200);
-        res.redirect('/page4')
+        res.redirect('/page4');
       }
   
       else{
@@ -126,11 +126,6 @@ app.post('/login', async (req, res) => {
 app.get('/register', (req, res) => {
   res.render('pages/register');
 });
-
-app.get('/game_complete', (req, res) => {
-  res.render('pages/game_complete');
-});
-
 
 //from lab 8
 app.post('/register', async (req, res) => {
@@ -170,12 +165,18 @@ const auth = (req, res, next) => {
   if (!req.session.user) {
     // Default to login page.
     return res.redirect('/login');
+  } else if ((req.url == '/page1' || req.url == '/page2' || req.url == '/page3' || req.url == '/page4') && req.session.user.progress == 13) {
+    return res.redirect('/game_complete');
   }
   next();
 };
 
 // Authentication Required
 app.use(auth);
+
+app.get('/game_complete', (req, res) => {
+  res.render('pages/game_complete', {user: req.session.user}); 
+});
 
 app.get('/page1', (req, res) => {
   const sqlPage1 = "SELECT * FROM scene_state WHERE scene_number = '1';";
@@ -300,15 +301,16 @@ app.post('/update_is_solved', async (req, res) => {
       //Update the user's progress:
       const sql_item_update = 'UPDATE users SET progress = $1 WHERE user_id = $2;'; 
       req.session.user.progress += 1;
-        var updated_progress = req.session.user.progress;
+      var updated_progress = req.session.user.progress;
 
-        db.none(sql_item_update, [updated_progress, user_id])
-          .then(data2 => {
-            res.status(200).send({message:"Puzzle was solved and progress updated successfully!"});
-          })
-          .catch(function (err) {
-            res.status(400).send({message:"Progress failed to update"});
-          });
+      db.none(sql_item_update, [updated_progress, user_id])
+      .then(data2 => {
+        res.status(200).send({message:"Puzzle was solved and progress updated successfully!"});
+      })
+      .catch(function (err) {
+        res.status(400).send({message:"Progress failed to update"});
+      });
+
     });
   }).catch(function (err) {
     res.status(400).send({message:"Puzzle is_solved failed to update (Incorrect puzzle name)."});
