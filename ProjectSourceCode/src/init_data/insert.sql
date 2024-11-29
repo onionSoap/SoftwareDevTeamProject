@@ -9,11 +9,6 @@ VALUES
     -- username: beep, password: boop
     ('beep','$2a$10$n4si2D1TNuaFohFTsxx/A.HAlDRag2cs6fkwmU2XdYiAYLGmmXTOi');
 
-INSERT INTO users (username, password, progress)
-VALUES
-    -- username: Sofia, password: admin
-    ('Sofia','$2a$10$UjNEiZ7DKCr4iTt3.yRD3uAswujYyjRdzi8UsCI4S1UAbVldSPCWu', 13);
-
 -- puzzles 1-3, values at 33,33, and 34 (total 100)
 -- update with Sofia's puzzles
 INSERT INTO puzzles (name, value)
