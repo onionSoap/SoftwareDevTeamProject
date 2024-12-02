@@ -334,6 +334,19 @@ app.get('/all_current_item_status', async (req, res) => {
   });
 });
 
+app.patch('/update_item_visibility', async (req, res) => {
+  const {new_visibility_state, object_name} = req.body
+  //const user_id = req.session.user.user_id;
+  const sqlUpdateVisibility = 'UPDATE scene_state SET visible_state = $1 WHERE object = $2;'; 
+  db.any(sqlUpdateVisibility, [new_visibility_state,object_name])
+  .then(data => {
+    res.status(200).send({message:"Visibility was updated in db", item_status: data});
+  })
+  .catch(function (err) {
+    res.status(400).send({message:"Failed to update visibility in db"});
+  });
+});
+
 //add gets for item status, and puzzle is_solved
 
 app.get('/logout', (req, res) => {

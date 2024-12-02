@@ -38,6 +38,14 @@
             elements = document.querySelectorAll(`[id=${id}]`);
             elements.forEach((found_item)=>{ //In case there are multiple of the same item shown across many scenes (for example scene 3 & scene3b)
                 found_item.style.visibility = "hidden";
+                axios.patch("update_item_visibility", {
+                    new_visibility_state : 'hidden',
+                    object_name : id
+                })
+                .then((response) => {
+                    console.log("Visibility for ", id, " updated to hidden.")
+                })
+                .then((error) => console.log(error));
             });
             //TODO: update database with item id as the item name, and set it to hidden
         }
@@ -46,6 +54,14 @@
             elements = document.querySelectorAll(`[id=${id}]`); 
             elements.forEach((found_item)=>{
                 found_item.style.visibility = "visible";
+                axios.patch("update_item_visibility", {
+                    new_visibility_state : 'visible',
+                    object_name : id
+                })
+                .then((response) => {
+                    console.log("Visibility for ", id, " updated to visible.")
+                })
+                .then((error) => console.log(error));
             });
             //TODO: update database
         }
