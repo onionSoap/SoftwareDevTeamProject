@@ -116,22 +116,24 @@
             }
         }
  
-        function pickup(id){
+        function pickup(id) {
             hide(id);
             current_active_item = id;
-            axios.patch("update_item_status", {
-                item_name:id,
-                new_status:"found"
+            axios.patch('/update_item_status', {
+                item_name: id,
+                new_status: 'found'
             })
-            .then((response) => {
-                // first update check, setting to found
-                const inventoryItem = document.querySelector(`.item img[alt='${id}']`).parentElement;
+            .then(response => {
+                // changing inventory to show the item as 'found'
+                const inventoryItem = document.querySelector(`.item img[alt='${id}']`)?.parentElement;
                 if (inventoryItem) {
-                    inventoryItem.classList.add('found');
-                    inventoryItem.classList.remove('unknown');
+                inventoryItem.classList.add('found');
+                inventoryItem.classList.remove('unknown');
+                } else {
+                console.error(`Inventory item with alt='${id}' not found.`);
                 }
             })
-            .catch((error) => console.log(error));
+            .catch(error => console.error(error));
         }
 
         function update_progress(id){
