@@ -140,16 +140,19 @@ app.post('/register', async (req, res) => {
   const sqlRegister = "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *;" ;
   const sqlUsersPuzzles = "INSERT INTO users_puzzles (user_id, puzzle_id) VALUES ($1, 1), ($1, 2), ($1, 3) RETURNING *;";
   const sqlUsersItems = "INSERT INTO users_items (user_id, item_id) VALUES ($1, 1),($1, 2),($1, 3),($1, 4),($1, 5),($1, 6),($1, 7),($1, 8),($1, 9),($1,10),($1, 11) RETURNING *";
+  const sqlSceneState = "INSERT INTO scene_state (user_id,scene_number, object, visible_state) VALUES ($1,'1','antlers','visible'),($1,'1','complete_carrot_nose', 'hidden'),($1,'1','complete_christmas_lights', 'hidden'),($1,'1','complete_wreath', 'hidden'),($1,'1','key','hidden'),($1,'1','flour','visible'),($1,'1','christmas_lights','visible'),($1,'2', 'dough_in_bowl', 'hidden'),($1,'2', 'carrot', 'visible'),($1,'2', 'butter', 'visible'),($1,'2', 'sugar', 'visible'),($1,'3','lock_open','hidden'),($1,'3','lock_closed','visible'),($1,'3','cookie_cutter','visible'),($1,'3','mistletoe','visible'),($1,'4','small_tree','visible'),($1,'4','lucky_star','visible'),($1,'4','complete_christmas_tree','hidden'),($1,'4','wreath','visible'),($1,'3b','scene3_b','hidden'),($1,'3b','potion_steam','hidden'),($1,'3b','potion','hidden'),($1,'3b','cookie_cutter','visible'),($1,'3b','mistletoe','visible'),($1,'2b','scene2_b','hidden'),($1,'2b','cookies','hidden'),($1,'2b','cookie_cutouts','hidden'),($1,'2b','pan','hidden'),($1,'2b','oven_door','visible') RETURNING *;";
   try{
     // console.log("In try")
     // const temp_<w/e> NOT NECESSARY BUT GOOD TO T/S 
     const temp_user = await db.one(sqlRegister, [username, hash]); //changed to one to get the temp_user variable data
     // console.log("Users: ", temp_user)
-    console.log("temp_user.user_id: ",temp_user.user_id)
+    //console.log("temp_user.user_id: ",temp_user.user_id)
     const temp_up = await db.any(sqlUsersPuzzles, [temp_user.user_id]); //changed to any instead of one since there are three insertions
     // console.log("Users_Puzzles: ", temp_up)
     const temp_ui = await db.any(sqlUsersItems, [temp_user.user_id]);
     // console.log("Users_Items: ", temp_ui);
+    const temp_ss = await db.any(sqlSceneState, [temp_user.user_id]);
+    console.log("Scene_state for new user: ", temp_ss);
     res.status(200).render('pages/register', {message: "Registration Successful!"});
   }
   catch(error) {
@@ -179,8 +182,9 @@ app.get('/game_complete', (req, res) => {
 });
 
 app.get('/page1', (req, res) => {
-  const sqlPage1 = "SELECT * FROM scene_state WHERE scene_number = '1';";
-  db.any(sqlPage1)
+  const user_id = req.session.user.user_id;
+  const sqlPage1 = "SELECT * FROM scene_state WHERE scene_number = '1' AND user_id = $1;";
+  db.any(sqlPage1, [user_id])
   .then(data =>{
     var scene_1_visible_items = data;
     //console.log("Scene_1...:",scene_1_visible_items)// ", and Scene_1_Visible_Items: ", scene_1_visible_items
@@ -193,8 +197,9 @@ app.get('/page1', (req, res) => {
 
 app.get('/page2', (req, res) => {
   //res.render('pages/page2', {user: req.session.user}); //this will call the /anotherRoute route in the API
-  const sqlPage2 = "SELECT * FROM scene_state WHERE scene_number = '2' OR scene_number = '2b';";
-  db.any(sqlPage2)
+  const user_id = req.session.user.user_id;
+  const sqlPage2 = "SELECT * FROM scene_state WHERE (scene_number = '2' OR scene_number = '2b') AND user_id = $1;";
+  db.any(sqlPage2, [user_id])
   .then(data =>{
     var scene_2_visible_items = data;
     //console.log("Scene_2...:",scene_2_visible_items)
@@ -208,8 +213,9 @@ app.get('/page2', (req, res) => {
 
 app.get('/page3', (req, res) => {
   //res.render('pages/page3', {user: req.session.user}); //this will call the /anotherRoute route in the API
-  const sqlPage3 = "SELECT * FROM scene_state WHERE scene_number = '3' OR scene_number = '3b';";
-  db.any(sqlPage3)
+  const user_id = req.session.user.user_id;
+  const sqlPage3 = "SELECT * FROM scene_state WHERE (scene_number = '3' OR scene_number = '3b') AND user_id = $1;";
+  db.any(sqlPage3, [user_id])
   .then(data =>{
     var scene_3_visible_items = data;
     res.render('pages/page3', {user: req.session.user, scene_3_visible_items: JSON.stringify(data), scene3b:req.session.user.page3b}); 
@@ -221,8 +227,9 @@ app.get('/page3', (req, res) => {
 
 app.get('/page4', (req, res) => {
   // res.render('pages/page4'); //this will call the /anotherRoute route in the API
-  const sqlPage4 = "SELECT * FROM scene_state WHERE scene_number = '4';";
-  db.any(sqlPage4)
+  const user_id = req.session.user.user_id;
+  const sqlPage4 = "SELECT * FROM scene_state WHERE scene_number = '4' AND user_id = $1;";
+  db.any(sqlPage4, [user_id])
   .then(data =>{
     var scene_4_visible_items = data;
     //console.log("Scene_4...:",scene_4_visible_items)
