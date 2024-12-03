@@ -46,7 +46,13 @@ CREATE TABLE scenes (
 
 CREATE TABLE scene_state (
     scene_state_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
     scene_number VARCHAR(2) REFERENCES scenes(scene_id) ON DELETE CASCADE,
     object VARCHAR(30) NOT NULL,
     visible_state VARCHAR(7) CHECK(visible_state IN('visible','hidden'))
 );
+
+-- CREATE TABLE users_scene_state(
+--     user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+--     scene_state_id INT REFERENCES scene_state(scene_state_id) ON DELETE CASCADE;
+-- );
