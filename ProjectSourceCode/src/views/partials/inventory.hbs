@@ -95,11 +95,24 @@
             if (currentActive) {
                 currentActive.classList.remove('active');
                 currentActive.classList.add('found');
+                // change previously active item to found
+                const previousActiveItemName = currentActive.children[0].alt;
+                axios.patch("update_item_status", {
+                    item_name: previousActiveItemName,
+                    new_status: "found"
+                })
+                .catch((error) => console.log(error));
             }
             clickedItem.classList.remove('found');
             clickedItem.classList.add('active');
             current_active_item = clickedItem.children[0].alt;
-            //INVENTORY TODO: update the item's status in the database using axios
+
+            // this should change items to active
+            axios.patch("update_item_status", {
+                item_name: current_active_item,
+                new_status: 'active'
+            })
+            .catch((error) => console.log(error));
         });
     </script>
 </div>

@@ -196,18 +196,42 @@ app.get('/page1', (req, res) => {
 });
 
 app.get('/page2', (req, res) => {
-  //res.render('pages/page2', {user: req.session.user}); //this will call the /anotherRoute route in the API
   const user_id = req.session.user.user_id;
-  const sqlPage2 = "SELECT * FROM scene_state WHERE (scene_number = '2' OR scene_number = '2b') AND user_id = $1;";
+
+  // Query to get scene data
+  const sqlPage2 = `
+    SELECT * FROM scene_state 
+    WHERE (scene_number = '2' OR scene_number = '2b') AND user_id = $1;
+  `;
+
+  // Query to get user's items and statuses
+  const sqlItems = `
+    SELECT items.name, users_items.status 
+    FROM items 
+    JOIN users_items ON items.item_id = users_items.item_id 
+    WHERE users_items.user_id = $1;
+  `;
+
   db.any(sqlPage2, [user_id])
-  .then(data =>{
-    var scene_2_visible_items = data;
-    //console.log("Scene_2...:",scene_2_visible_items)
-    res.render('pages/page2', {user: req.session.user, scene_2_visible_items: JSON.stringify(data)}); 
-  })
-  .catch(function (err){
-    res.status(400).send({message:"Failed to load page 2 from db data."});
-  });
+    .then(sceneData => {
+      db.any(sqlItems, [user_id])
+        .then(itemData => {
+          // Pass the items data to the template
+          res.render('pages/page2', {
+            user: req.session.user,
+            scene_2_visible_items: JSON.stringify(sceneData),
+            items: itemData
+          });
+        })
+        .catch(err => {
+          console.error('Error fetching items:', err);
+          res.status(500).send('Error fetching items');
+        });
+    })
+    .catch(err => {
+      console.error('Error fetching scene data:', err);
+      res.status(500).send('Error fetching scene data');
+    });
 });
 
 
