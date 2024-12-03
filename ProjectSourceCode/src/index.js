@@ -336,10 +336,11 @@ app.get('/all_current_item_status', async (req, res) => {
 
 app.patch('/update_item_visibility', async (req, res) => {
   const {new_visibility_state, object_name} = req.body
-  //const user_id = req.session.user.user_id;
-  const sqlUpdateVisibility = 'UPDATE scene_state SET visible_state = $1 WHERE object = $2;'; 
-  db.any(sqlUpdateVisibility, [new_visibility_state,object_name])
+  const user_id = req.session.user.user_id;
+  const sqlUpdateVisibility = 'UPDATE scene_state SET visible_state = $1 WHERE user_id = $2 AND object = $3;'; 
+  db.any(sqlUpdateVisibility, [new_visibility_state,user_id,object_name])
   .then(data => {
+    console.log("NVS: ",new_visibility_state,", ON: ", object_name, ", UI: ", user_id);
     res.status(200).send({message:"Visibility was updated in db", item_status: data});
   })
   .catch(function (err) {
