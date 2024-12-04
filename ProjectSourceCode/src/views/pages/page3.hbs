@@ -19,7 +19,13 @@
                         }
                 }
                 if (obj.object != 'entire_scene'){
-                    document.getElementById(obj.object).style.visibility = obj.visible_state;
+                    if (obj.object.includes("potion_counter") ){
+                        if(obj.visible_state == "visible"){
+                            document.getElementById('potion_counter_text').textContent = obj.object[14]+"/4"; 
+                        }
+                    } else {
+                        document.getElementById(obj.object).style.visibility = obj.visible_state;
+                    }
                 }
             })
         </script>

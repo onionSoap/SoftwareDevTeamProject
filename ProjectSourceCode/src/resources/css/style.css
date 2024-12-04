@@ -155,7 +155,7 @@ font-size: 1.5em;
 }
 
 body {
-  background: linear-gradient(180deg, #B82E00, #047400); /* Red to green gradient */
+  background: linear-gradient(to bottom, #cb4335, #1e8449);
   color: white;
   align-items: center;
   height: 100vh;

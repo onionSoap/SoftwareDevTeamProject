@@ -1,9 +1,5 @@
 {{>header}}
 
-<!--TODO: there's currently an issue with axios sending several requests at once... this is not working. Options are:
-    - figure out how to get async/await working
-    - use cookies to store all of this data, & a save button? -->
-
 <div class="non-header">
 
     <script>
@@ -100,6 +96,21 @@
             }
             if(counter == 3){
                 show_2b();
+            } else {
+                //Update counter in database
+                axios.patch("update_item_visibility", {
+                    new_visibility_state : 'hidden',
+                    object_name : `dough_counter${counter-1}`
+                })
+                .then((response) => {})
+                .then((error) => console.log(error));
+
+                axios.patch("update_item_visibility", {
+                    new_visibility_state : 'visible',
+                    object_name : `dough_counter${counter}`
+                })
+                .then((response) => { })
+                .then((error) => console.log(error));
             }
         }
 
@@ -114,6 +125,21 @@
             if(counter == 4){
                 show('potion');
             }
+
+            //Update counter in database
+            axios.patch("update_item_visibility", {
+                new_visibility_state : 'hidden',
+                object_name : `potion_counter${counter-1}`
+            })
+            .then((response) => {})
+            .then((error) => console.log(error));
+
+            axios.patch("update_item_visibility", {
+                new_visibility_state : 'visible',
+                object_name : `potion_counter${counter}`
+            })
+            .then((response) => { })
+            .then((error) => console.log(error));
         }
  
         function pickup(id){

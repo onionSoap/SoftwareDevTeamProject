@@ -10,7 +10,6 @@ VALUES
     ('beep','$2a$10$n4si2D1TNuaFohFTsxx/A.HAlDRag2cs6fkwmU2XdYiAYLGmmXTOi');
 
 -- puzzles 1-3, values at 33,33, and 34 (total 100)
--- update with Sofia's puzzles
 INSERT INTO puzzles (name, value)
 VALUES
     ('carrot', 1),
@@ -37,7 +36,6 @@ VALUES
     (2,2),
     (2,3);
 
--- update this to inventory order
 INSERT INTO items (name)
 VALUES
     ('carrot'),
@@ -124,6 +122,14 @@ VALUES
     (1,'2b','cookie_cutouts','hidden'),
     (1,'2b','pan','hidden'),
     (1,'2b','oven_door','visible'),
+    (1, '2', 'dough_counter0','visible'),
+    (1, '2', 'dough_counter1','hidden'),
+    (1, '2', 'dough_counter2','hidden'),
+    (1, '3b', 'potion_counter0','visible'),
+    (1, '3b', 'potion_counter1','hidden'),
+    (1, '3b', 'potion_counter2','hidden'),
+    (1, '3b', 'potion_counter3','hidden'),
+    (1, '3b', 'potion_counter4','hidden'),
     (2,'1','antlers','visible'),
     (2,'1','complete_carrot_nose', 'hidden'),
     (2,'1','complete_christmas_lights', 'hidden'),
@@ -152,4 +158,12 @@ VALUES
     (2,'2b','cookies','hidden'),
     (2,'2b','cookie_cutouts','hidden'),
     (2,'2b','pan','hidden'),
-    (2,'2b','oven_door','visible'); --need to integrate with new_user_generation
+    (2,'2b','oven_door','visible'),
+    (2, '2', 'dough_counter0','visible'),
+    (2, '2', 'dough_counter1','hidden'),
+    (2, '2', 'dough_counter2','hidden'),
+    (2, '3b', 'potion_counter0','visible'),
+    (2, '3b', 'potion_counter1','hidden'),
+    (2, '3b', 'potion_counter2','hidden'),
+    (2, '3b', 'potion_counter3','hidden'),
+    (2, '3b', 'potion_counter4','hidden');
