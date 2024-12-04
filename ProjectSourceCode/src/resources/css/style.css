@@ -153,3 +153,56 @@ font-size: 1.5em;
 .glow-effect:hover {
   filter: drop-shadow(0px 0px 70px rgb(233, 255, 36));
 }
+
+body {
+  background: linear-gradient(180deg, #B82E00, #047400); /* Red to green gradient */
+  color: white;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+
+.scoreboard-container {
+  text-align: center;
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.scoreboard-title {
+  font-size: 2.5em;
+  color: #FFF5F5;
+}
+
+.scoreboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.2em;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.scoreboard-table th, .scoreboard-table td {
+  padding: 15px;
+  border: 1px solid #ddd;
+}
+
+.scoreboard-table th {
+  background-color: #006400; /* Dark green */
+  color: #FFF5F5;
+  font-weight: bold;
+}
+
+.scoreboard-table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.1); /* Light transparent row coloring */
+}
+
+.scoreboard-table td {
+  color: #FFF5F5;
+}

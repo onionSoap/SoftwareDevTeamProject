@@ -152,7 +152,7 @@ app.post('/register', async (req, res) => {
     const temp_ui = await db.any(sqlUsersItems, [temp_user.user_id]);
     // console.log("Users_Items: ", temp_ui);
     const temp_ss = await db.any(sqlSceneState, [temp_user.user_id]);
-    console.log("Scene_state for new user: ", temp_ss);
+    //console.log("Scene_state for new user: ", temp_ss);
     res.status(200).render('pages/register', {message: "Registration Successful!"});
   }
   catch(error) {
@@ -242,7 +242,15 @@ app.get('/page4', (req, res) => {
 
 
 app.get('/scoreboard', (req, res) => {
-  res.render('pages/scoreboard'); //this will call the /anotherRoute route in the API
+  const sqlForTimer = 'SELECT * FROM users ORDER BY timer ASC;';
+  db.any(sqlForTimer)
+  .then(data => {
+    //console.log(data);
+    res.render('pages/scoreboard', {scoreboard_data: data, user: req.session.user});
+  })
+  .catch(function (err){
+    res.status(400).send({message:"Failed to load scoreboard."});
+  });
 });
 //These moved below middleware bc only logged-in users should be able to do these actions. For testing purposes, move ABOVE middleware!
 
@@ -347,7 +355,7 @@ app.patch('/update_item_visibility', async (req, res) => {
   const sqlUpdateVisibility = 'UPDATE scene_state SET visible_state = $1 WHERE user_id = $2 AND object = $3;'; 
   db.any(sqlUpdateVisibility, [new_visibility_state,user_id,object_name])
   .then(data => {
-    console.log("NVS: ",new_visibility_state,", ON: ", object_name, ", UI: ", user_id);
+    //console.log("NVS: ",new_visibility_state,", ON: ", object_name, ", UI: ", user_id);
     res.status(200).send({message:"Visibility was updated in db", item_status: data});
   })
   .catch(function (err) {
