@@ -346,9 +346,10 @@ app.patch('/update_item_status', (req, res) => {
   // UNCOMMENT AND REMOVE user_id FROM ABOVE LINE.
   const {item_name, new_status} = req.body;
   const user_id = req.session.user.user_id;
-  const valid_status = ['unknown','found','active','inactive'];
+  const valid_status = ['unknown','found','active','disabled'];
   if(!valid_status.includes(new_status)){
     res.status(400).send({error: 'Item Status Update Error!'});
+    return;
   }
 
   //Find item id:
@@ -370,15 +371,17 @@ app.patch('/update_item_status', (req, res) => {
       const sql_item_update = "UPDATE users_items SET status = $1 WHERE user_id = $2 AND item_id = $3;";
       await db.none(sql_item_update, [new_status, user_id, item_id]);
       res.status(200).send({message:"Item status updated successfully!"}); 
+      return;
     }
     //error if unable to
     catch (error){
-      console.error('Error updating item status: ', error);
-      res.status(400).send({error: 'Item Status Update Error!'});
+      console.error('Error updating item status: ' + item_name + ' ' +  error);
+      res.status(400).send({error: 'Item Status Update Error! '});
+      return;
     }
 
   }).catch(error => {
-    console.error('Item does not exist: ', error);
+    console.error('Item does not exist: ' + item_name + ' ' + error);
     res.status(400).send({error: 'Item with this name does not exist.'});
   });
 
