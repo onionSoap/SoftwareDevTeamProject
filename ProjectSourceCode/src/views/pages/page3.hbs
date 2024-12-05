@@ -7,27 +7,36 @@
     {{#if scene_3_visible_items}}
         <script>
             var items = ({{{scene_3_visible_items}}});
+            var currentScene = '3';
             //this is kind of horrible but it works
+            //CHECK SCENE #:
             items.forEach((obj, i) => {
                 if (obj.scene_number == '3b' && obj.object == 'scene3_b'){
                         if (obj.visible_state == 'hidden'){
                             document.getElementById("scene3_b").style.visibility = "hidden";
                             document.getElementById("scene3").style.visibility = "visible";
                         } else {
+                            currentScene = '3b';
                             document.getElementById("scene3_b").style.visibility = "visible";
                             document.getElementById("scene3").style.visibility = "hidden";
                         }
                 }
+            });
+            //DISPLAY OBJ'S:
+            items.forEach((obj, i) => {
                 if (obj.object != 'entire_scene'){
                     if (obj.object.includes("potion_counter") ){
                         if(obj.visible_state == "visible"){
                             document.getElementById('potion_counter_text').textContent = obj.object[14]+"/4"; 
                         }
                     } else {
-                        document.getElementById(obj.object).style.visibility = obj.visible_state;
+                        if (obj.scene_number == currentScene){
+                            console.log(obj.object + " " + obj.scene_number);
+                            document.getElementById(obj.object).style.visibility = obj.visible_state;
+                        }
                     }
                 }
-            })
+            });
         </script>
     {{/if}}
 
