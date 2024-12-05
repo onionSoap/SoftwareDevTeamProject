@@ -55,9 +55,10 @@
                     object_name : id
                 })
                 .then((response) => {
-                    console.log("Visibility for ", id, " updated to visible.")
-                })
-                .then((error) => console.log(error));
+                    if (id=="scene3_b") {
+                        window.location.reload();
+                    }                
+                }).then((error) => console.log(error));
             });
             //TODO: update database
         }
