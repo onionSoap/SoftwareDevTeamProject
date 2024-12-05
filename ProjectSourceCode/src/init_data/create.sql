@@ -11,7 +11,7 @@ CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(30) NOT NULL UNIQUE,
     password CHAR(60) NOT NULL,
-    timer TIME DEFAULT '00:00:00',
+    timer INTEGER DEFAULT 0,
     progress INT DEFAULT '0'
 );
 -- removing these puzzle tables and changing the game to be "item status based" vs "puzzle status based" maybe...

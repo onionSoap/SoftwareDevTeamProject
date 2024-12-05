@@ -142,18 +142,24 @@
             .then((error) => console.log(error));
         }
  
-        function pickup(id){
+        function pickup(id) {
             hide(id);
             current_active_item = id;
-            axios.patch("update_item_status", {
-                item_name:id,
-                new_status:"found"
+            axios.patch('/update_item_status', {
+                item_name: id,
+                new_status: 'found'
             })
-            .then((response) => {
-                //console.log(response.data);
-                //INVENTORY TODO: update inventory here, make the item 'found'!
+            .then(response => {
+                // changing inventory to show the item as 'found'
+                const inventoryItem = document.querySelector(`.item img[alt='${id}']`)?.parentElement;
+                if (inventoryItem) {
+                inventoryItem.classList.add('found');
+                inventoryItem.classList.remove('unknown');
+                } else {
+                console.error(`Inventory item with alt='${id}' not found.`);
+                }
             })
-            .then((error) => console.log(error));
+            .catch(error => console.error(error));
         }
 
         function update_progress(id){
@@ -171,7 +177,7 @@
         }
 
         function load_items(){
-            //Make all inventory items pickupable:
+            //changing all inventory items:
             for (let i in pickupable_item_ids){
                 var elements = null;
                 try{
@@ -189,27 +195,41 @@
                 }
             }
             
-            //Make all puzzles work:
             for (let key in item_activation_dict){
 
-                //Check if the item's in the scene:
+                //check if the item in the scene
                 var puzzle = null;
                 try{
                     puzzle = document.getElementById(item_activation_dict[key][0])
                 }catch(error){}
 
-                //If it's in the scene, add an event listener for clicking on the puzzle:
+                //if in current page, add an event listener:
                 if(puzzle){
                     puzzle.addEventListener("click", (event) => {
-                        if (current_active_item == key){ //If the user has the correct item to solve the puzzle:
-                            //Call all the functions that happen when the puzzle is solved:
-                            for (let index in item_activation_dict[key][1]){ 
+                        if (current_active_item == key) {
+                            for (let index in item_activation_dict[key][1]) { 
                                 eval(item_activation_dict[key][1][index]);
                             }
                             update_progress(key);
 
-                            //INVENTORY TODO: update the inventory status of the item with the 'key' id to be 'disabled', 
-                            //then update the database with this new status.
+                            // make 'disabled' in db && inventory
+                            axios.patch("update_item_status", {
+                                item_name: key,
+                                new_status: "disabled"
+                            })
+                            .then((response) => {
+                                // updating the inventory
+                                const inventoryItem = document.querySelector(`.item img[alt='${key}']`).parentElement;
+                                if (inventoryItem) {
+                                    inventoryItem.classList.add('disabled');
+                                    inventoryItem.classList.remove('active');
+                                    inventoryItem.classList.remove('found');
+                                }
+                            })
+                            .catch((error) => console.log(error));
+
+                            // reset the current active item since it's used up, now null
+                            current_active_item = null;
                         }
                     });
                 }

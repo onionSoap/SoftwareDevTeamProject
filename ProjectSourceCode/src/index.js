@@ -16,10 +16,15 @@ const axios = require('axios');
 const hbs = handlebars.create({
   extname: 'hbs',
   layoutsDir: __dirname + '/views/layouts',
-  partialsDir:[
+  partialsDir: [
     __dirname + '/views/partials',
     __dirname + '/views/partials/svg_components'
-  ]
+  ],
+  helpers: {
+    eq: function (a, b) {
+      return a === b;
+    }
+  }
 });
 // -------------------------------------  DB CONFIG AND CONNECT   ---------------------------------------
 //TODO: Use this later for setting up db!
@@ -81,46 +86,32 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    // console.log('login post accessed')
-    const username = req.body.username
-    const password = req.body.password
-    const hash = await bcrypt.hash(password, 10);
-    // console.log("Hashed password:", hash)
-    const sqlUsername = "SELECT * FROM users WHERE username = $1;"
-    
-    try{
-      //async + await make it so that I don't need to do .then(data etc..) which makes the code cleaner and work more efficiently. 
-      const user = await db.one(sqlUsername, [username]);
+  const username = req.body.username;
+  const password = req.body.password;
+  const sqlUsername = "SELECT * FROM users WHERE username = $1;";
+
+  try {
+    const user = await db.oneOrNone(sqlUsername, [username]);
+
+    if (user) {
       const match = await bcrypt.compare(password, user.password);
-  
-      //looks like there's a space for some reason? Why tho...?
-      // console.log("Username is:", username, ", Other username is:", user.username);
-      // console.log("Password is: ", password, ", Other password is: ", user.password)
-      // console.log("Matched as:", match);
-      // rest is mine from earlier
-      if(match){
-        // if (user.password == password && user.username == username){
-        // console.log("if statement")
-        delete user.password;
+
+      if (match) {
         delete user.password;
         req.session.user = user;
         req.session.save();
-        res.status(200);
-        res.redirect('/page4');
+        res.status(200).redirect('/page1');
+      } else {
+        res.render('pages/login', { message: "Incorrect username or password.", error: true });
       }
-  
-      else{
-        // console.log("else statement")
-        // If the password is incorrect, render the login page and send a message to the user stating "Incorrect username or password."
-        res.render('pages/login', {message:"Incorrect username or password.", error:true})
-        // res.render('/login')
-      }
+    } else {
+      res.render('pages/login', { message: "Incorrect username or password.", error: true });
     }
-    catch{
-      console.log("User doesn't exist! Try registering.")
-      res.redirect('/register')
-    }
-  })
+  } catch (error) {
+    console.error('Login Error:', error);
+    res.status(500).render('pages/login', { message: "An error occurred during login.", error: true });
+  }
+});
 
 //register
 app.get('/register', (req, res) => {
@@ -181,64 +172,175 @@ app.get('/game_complete', (req, res) => {
   res.render('pages/game_complete', {user: req.session.user}); 
 });
 
-app.get('/page1', (req, res) => {
+app.use(bodyParser.json());
+
+app.post('/save_timer', (req, res) => {
   const user_id = req.session.user.user_id;
-  const sqlPage1 = "SELECT * FROM scene_state WHERE scene_number = '1' AND user_id = $1;";
-  db.any(sqlPage1, [user_id])
-  .then(data =>{
-    var scene_1_visible_items = data;
-    //console.log("Scene_1...:",scene_1_visible_items)// ", and Scene_1_Visible_Items: ", scene_1_visible_items
-    res.render('pages/page1', {user: req.session.user, scene_1_visible_items: JSON.stringify(data)}); 
-  })
-  .catch(function (err){
-    res.status(400).send({message:"Failed to load page 1 from db data."});
-  });
+  const timer = req.body.timer;
+
+  // updating user timer in DB
+  const sqlUpdateTimer = 'UPDATE users SET timer = $1 WHERE user_id = $2;';
+  db.none(sqlUpdateTimer, [timer, user_id])
+    .then(() => {
+      req.session.user.timer = timer;
+      res.status(200).send({ message: 'Timer saved successfully' });
+    })
+    .catch(error => {
+      console.error('Error saving timer:', error);
+      res.status(500).send({ error: 'Error saving timer' });
+    });
 });
 
-app.get('/page2', (req, res) => {
-  //res.render('pages/page2', {user: req.session.user}); //this will call the /anotherRoute route in the API
+app.get('/page1', (req, res) => {
   const user_id = req.session.user.user_id;
-  const sqlPage2 = "SELECT * FROM scene_state WHERE (scene_number = '2' OR scene_number = '2b') AND user_id = $1;";
+
+  const sqlPage1 = `
+    SELECT * FROM scene_state 
+    WHERE scene_number = '1' AND user_id = $1;
+  `;
+
+  const sqlItems = `
+    SELECT items.name, users_items.status 
+    FROM items 
+    JOIN users_items ON items.item_id = users_items.item_id 
+    WHERE users_items.user_id = $1;
+  `;
+
+  db.any(sqlPage1, [user_id])
+    .then(sceneData => {
+      db.any(sqlItems, [user_id])
+        .then(itemData => {
+          res.render('pages/page1', {
+            user: req.session.user,
+            scene_1_visible_items: JSON.stringify(sceneData),
+            items: itemData
+          });
+        })
+        .catch(err => {
+          console.error('Error fetching items:', err);
+          res.status(500).send('Error fetching items');
+        });
+    })
+    .catch(err => {
+      console.error('Error fetching scene data:', err);
+      res.status(500).send('Error fetching scene data');
+    });
+});
+
+
+app.get('/page2', (req, res) => {
+  const user_id = req.session.user.user_id;
+
+  // Query to get scene data
+  const sqlPage2 = `
+    SELECT * FROM scene_state 
+    WHERE (scene_number = '2' OR scene_number = '2b') AND user_id = $1;
+  `;
+
+  // Query to get user's items and statuses
+  const sqlItems = `
+    SELECT items.name, users_items.status 
+    FROM items 
+    JOIN users_items ON items.item_id = users_items.item_id 
+    WHERE users_items.user_id = $1;
+  `;
+
   db.any(sqlPage2, [user_id])
-  .then(data =>{
-    var scene_2_visible_items = data;
-    //console.log("Scene_2...:",scene_2_visible_items)
-    res.render('pages/page2', {user: req.session.user, scene_2_visible_items: JSON.stringify(data)}); 
-  })
-  .catch(function (err){
-    res.status(400).send({message:"Failed to load page 2 from db data."});
-  });
+    .then(sceneData => {
+      db.any(sqlItems, [user_id])
+        .then(itemData => {
+          // Pass the items data to the template
+          res.render('pages/page2', {
+            user: req.session.user,
+            scene_2_visible_items: JSON.stringify(sceneData),
+            items: itemData
+          });
+        })
+        .catch(err => {
+          console.error('Error fetching items:', err);
+          res.status(500).send('Error fetching items');
+        });
+    })
+    .catch(err => {
+      console.error('Error fetching scene data:', err);
+      res.status(500).send('Error fetching scene data');
+    });
 });
 
 
 app.get('/page3', (req, res) => {
-  //res.render('pages/page3', {user: req.session.user}); //this will call the /anotherRoute route in the API
   const user_id = req.session.user.user_id;
-  const sqlPage3 = "SELECT * FROM scene_state WHERE (scene_number = '3' OR scene_number = '3b') AND user_id = $1;";
+
+  const sqlPage3 = `
+    SELECT * FROM scene_state 
+    WHERE (scene_number = '3' OR scene_number = '3b') AND user_id = $1;
+  `;
+
+  const sqlItems = `
+    SELECT items.name, users_items.status 
+    FROM items 
+    JOIN users_items ON items.item_id = users_items.item_id 
+    WHERE users_items.user_id = $1;
+  `;
+
   db.any(sqlPage3, [user_id])
-  .then(data =>{
-    var scene_3_visible_items = data;
-    res.render('pages/page3', {user: req.session.user, scene_3_visible_items: JSON.stringify(data), scene3b:req.session.user.page3b}); 
-  })
-  .catch(function (err){
-    res.status(400).send({message:"Failed to load page 3 from db data."});
-  });
+    .then(sceneData => {
+      db.any(sqlItems, [user_id])
+        .then(itemData => {
+          res.render('pages/page3', {
+            user: req.session.user,
+            scene_3_visible_items: JSON.stringify(sceneData),
+            items: itemData
+          });
+        })
+        .catch(err => {
+          console.error('Error fetching items:', err);
+          res.status(500).send('Error fetching items');
+        });
+    })
+    .catch(err => {
+      console.error('Error fetching scene data:', err);
+      res.status(500).send('Error fetching scene data');
+    });
 });
 
+
 app.get('/page4', (req, res) => {
-  // res.render('pages/page4'); //this will call the /anotherRoute route in the API
   const user_id = req.session.user.user_id;
-  const sqlPage4 = "SELECT * FROM scene_state WHERE scene_number = '4' AND user_id = $1;";
+
+  const sqlPage4 = `
+    SELECT * FROM scene_state 
+    WHERE scene_number = '4' AND user_id = $1;
+  `;
+
+  const sqlItems = `
+    SELECT items.name, users_items.status 
+    FROM items 
+    JOIN users_items ON items.item_id = users_items.item_id 
+    WHERE users_items.user_id = $1;
+  `;
+
   db.any(sqlPage4, [user_id])
-  .then(data =>{
-    var scene_4_visible_items = data;
-    //console.log("Scene_4...:",scene_4_visible_items)
-    res.render('pages/page4', {user: req.session.user, scene_4_visible_items: JSON.stringify(data)}); 
-  })
-  .catch(function (err){
-    res.status(400).send({message:"Failed to load page 4 from db data."});
-  });
+    .then(sceneData => {
+      db.any(sqlItems, [user_id])
+        .then(itemData => {
+          res.render('pages/page4', {
+            user: req.session.user,
+            scene_4_visible_items: JSON.stringify(sceneData),
+            items: itemData
+          });
+        })
+        .catch(err => {
+          console.error('Error fetching items:', err);
+          res.status(500).send('Error fetching items');
+        });
+    })
+    .catch(err => {
+      console.error('Error fetching scene data:', err);
+      res.status(500).send('Error fetching scene data');
+    });
 });
+
 
 
 app.get('/scoreboard', (req, res) => {
@@ -262,9 +364,10 @@ app.patch('/update_item_status', (req, res) => {
   // UNCOMMENT AND REMOVE user_id FROM ABOVE LINE.
   const {item_name, new_status} = req.body;
   const user_id = req.session.user.user_id;
-  const valid_status = ['unknown','found','active','inactive'];
+  const valid_status = ['unknown','found','active','disabled'];
   if(!valid_status.includes(new_status)){
     res.status(400).send({error: 'Item Status Update Error!'});
+    return;
   }
 
   //Find item id:
@@ -286,15 +389,17 @@ app.patch('/update_item_status', (req, res) => {
       const sql_item_update = "UPDATE users_items SET status = $1 WHERE user_id = $2 AND item_id = $3;";
       await db.none(sql_item_update, [new_status, user_id, item_id]);
       res.status(200).send({message:"Item status updated successfully!"}); 
+      return;
     }
     //error if unable to
     catch (error){
-      console.error('Error updating item status: ', error);
-      res.status(400).send({error: 'Item Status Update Error!'});
+      console.error('Error updating item status: ' + item_name + ' ' +  error);
+      res.status(400).send({error: 'Item Status Update Error! '});
+      return;
     }
 
   }).catch(error => {
-    console.error('Item does not exist: ', error);
+    console.error('Item does not exist: ' + item_name + ' ' + error);
     res.status(400).send({error: 'Item with this name does not exist.'});
   });
 
