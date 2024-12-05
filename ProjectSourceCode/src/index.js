@@ -203,7 +203,8 @@ app.get('/page1', (req, res) => {
     SELECT items.name, users_items.status 
     FROM items 
     JOIN users_items ON items.item_id = users_items.item_id 
-    WHERE users_items.user_id = $1;
+    WHERE users_items.user_id = $1
+    ORDER BY items.item_id;
   `;
 
   const userProgress = `SELECT progress FROM users WHERE user = ${req.session.user};`
@@ -243,7 +244,8 @@ app.get('/page2', (req, res) => {
     SELECT items.name, users_items.status 
     FROM items 
     JOIN users_items ON items.item_id = users_items.item_id 
-    WHERE users_items.user_id = $1;
+    WHERE users_items.user_id = $1
+    ORDER BY items.item_id;
   `;
 
   db.any(sqlPage2, [user_id])
@@ -281,7 +283,8 @@ app.get('/page3', (req, res) => {
     SELECT items.name, users_items.status 
     FROM items 
     JOIN users_items ON items.item_id = users_items.item_id 
-    WHERE users_items.user_id = $1;
+    WHERE users_items.user_id = $1
+    ORDER BY items.item_id;
   `;
 
   db.any(sqlPage3, [user_id])
@@ -318,7 +321,8 @@ app.get('/page4', (req, res) => {
     SELECT items.name, users_items.status 
     FROM items 
     JOIN users_items ON items.item_id = users_items.item_id 
-    WHERE users_items.user_id = $1;
+    WHERE users_items.user_id = $1
+    ORDER BY items.item_id;
   `;
 
   db.any(sqlPage4, [user_id])
