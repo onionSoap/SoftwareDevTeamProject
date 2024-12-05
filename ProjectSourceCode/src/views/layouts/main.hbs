@@ -54,11 +54,7 @@
                     new_visibility_state : 'visible',
                     object_name : id
                 })
-                .then((response) => {
-                    if (id=="scene3_b") {
-                        window.location.reload();
-                    }                
-                }).then((error) => console.log(error));
+                .then((response) => {}).then((error) => console.log(error));
             });
             //TODO: update database
         }
@@ -82,11 +78,13 @@
         }
 
         function show_3b(){
-            show("scene3_b"); 
-            show("mistletoe"); 
-            show("cookie_cutter"); 
-            document.getElementById("scene3").style.visibility = "hidden";
-
+            axios.patch("update_item_visibility", {
+                new_visibility_state : 'visible',
+                object_name : "scene3_b"
+            })
+            .then((response) => {
+                window.location.reload();
+            }).then((error) => console.log(error));
         }
 
         function increment_dough_counter(){
