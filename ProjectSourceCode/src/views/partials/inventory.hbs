@@ -58,7 +58,6 @@
     document.getElementById('inventoryRow').addEventListener('click', function (e) {
       const clickedItem = e.target.closest('.item');
 
-      // Updated condition to include 'unknown' status check
       if (
         !clickedItem ||
         clickedItem.classList.contains('disabled') ||
@@ -70,7 +69,6 @@
         currentActive.classList.remove('active');
         currentActive.classList.add('found');
 
-        // Changing previous item's status to 'found' in the database
         const previousActiveItemName = currentActive.querySelector('img').alt;
         axios.patch('/update_item_status', {
           item_name: previousActiveItemName,
@@ -82,7 +80,7 @@
       clickedItem.classList.add('active');
       const current_active_item = clickedItem.querySelector('img').alt;
 
-      // Update clicked item to 'active' in the database
+      // change item to prevent click
       axios.patch('/update_item_status', {
         item_name: current_active_item,
         new_status: 'active'
