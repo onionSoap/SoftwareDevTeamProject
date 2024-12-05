@@ -16,10 +16,15 @@ const axios = require('axios');
 const hbs = handlebars.create({
   extname: 'hbs',
   layoutsDir: __dirname + '/views/layouts',
-  partialsDir:[
+  partialsDir: [
     __dirname + '/views/partials',
     __dirname + '/views/partials/svg_components'
-  ]
+  ],
+  helpers: {
+    eq: function (a, b) {
+      return a === b;
+    }
+  }
 });
 // -------------------------------------  DB CONFIG AND CONNECT   ---------------------------------------
 //TODO: Use this later for setting up db!
@@ -81,46 +86,32 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    // console.log('login post accessed')
-    const username = req.body.username
-    const password = req.body.password
-    const hash = await bcrypt.hash(password, 10);
-    // console.log("Hashed password:", hash)
-    const sqlUsername = "SELECT * FROM users WHERE username = $1;"
-    
-    try{
-      //async + await make it so that I don't need to do .then(data etc..) which makes the code cleaner and work more efficiently. 
-      const user = await db.one(sqlUsername, [username]);
+  const username = req.body.username;
+  const password = req.body.password;
+  const sqlUsername = "SELECT * FROM users WHERE username = $1;";
+
+  try {
+    const user = await db.oneOrNone(sqlUsername, [username]);
+
+    if (user) {
       const match = await bcrypt.compare(password, user.password);
-  
-      //looks like there's a space for some reason? Why tho...?
-      // console.log("Username is:", username, ", Other username is:", user.username);
-      // console.log("Password is: ", password, ", Other password is: ", user.password)
-      // console.log("Matched as:", match);
-      // rest is mine from earlier
-      if(match){
-        // if (user.password == password && user.username == username){
-        // console.log("if statement")
-        delete user.password;
+
+      if (match) {
         delete user.password;
         req.session.user = user;
         req.session.save();
-        res.status(200);
-        res.redirect('/page4');
+        res.status(200).redirect('/page1');
+      } else {
+        res.render('pages/login', { message: "Incorrect username or password.", error: true });
       }
-  
-      else{
-        // console.log("else statement")
-        // If the password is incorrect, render the login page and send a message to the user stating "Incorrect username or password."
-        res.render('pages/login', {message:"Incorrect username or password.", error:true})
-        // res.render('/login')
-      }
+    } else {
+      res.render('pages/login', { message: "Incorrect username or password.", error: true });
     }
-    catch{
-      console.log("User doesn't exist! Try registering.")
-      res.redirect('/register')
-    }
-  })
+  } catch (error) {
+    console.error('Login Error:', error);
+    res.status(500).render('pages/login', { message: "An error occurred during login.", error: true });
+  }
+});
 
 //register
 app.get('/register', (req, res) => {
@@ -179,6 +170,25 @@ app.use(auth);
 
 app.get('/game_complete', (req, res) => {
   res.render('pages/game_complete', {user: req.session.user}); 
+});
+
+app.use(bodyParser.json());
+
+app.post('/save_timer', (req, res) => {
+  const user_id = req.session.user.user_id;
+  const timer = req.body.timer;
+
+  // updating user timer in DB
+  const sqlUpdateTimer = 'UPDATE users SET timer = $1 WHERE user_id = $2;';
+  db.none(sqlUpdateTimer, [timer, user_id])
+    .then(() => {
+      req.session.user.timer = timer;
+      res.status(200).send({ message: 'Timer saved successfully' });
+    })
+    .catch(error => {
+      console.error('Error saving timer:', error);
+      res.status(500).send({ error: 'Error saving timer' });
+    });
 });
 
 app.get('/page1', (req, res) => {

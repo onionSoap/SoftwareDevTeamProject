@@ -4,11 +4,11 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>  
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hW+ALEwIH" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="/resources/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
@@ -16,19 +16,83 @@
         <div class="first-tier">
             {{#if user}}
                 <div class="username_head">Username: <span>{{user.username}}</span></div>
-                <div class="progress_head">Progress: <span id = "progress_display">{{user.progress}}/13</span></div>
-                <div class="timer_head">Timer: <span>{{user.timer}}</span></div>
+                <div class="progress_head">Progress: <span id="progress_display">{{user.progress}}/13</span></div>
+                <div class="timer_head">Timer: <span id="timer_display" data-initial-timer="{{user.timer}}"></span></div>
             {{else}}
                 <div class="username_head">Username: <span>N/A</span></div>
                 <div class="progress_head">Progress: <span>---</span></div>
                 <div class="timer_head">Timer: <span>---</span></div>
             {{/if}}
-            
         </div>
         <nav class="second-tier">
-            <a href="page1">Page1</a>
-            <a href="page2">Page2</a>
-            <a href="page3">Page3</a>
-            <a href="page4">Page4</a>
+            <a href="/page1">Page1</a>
+            <a href="/page2">Page2</a>
+            <a href="/page3">Page3</a>
+            <a href="/page4">Page4</a>
+            {{#if user}}
+                <a href="/logout" id="logout_link">Logout</a>
+            {{/if}}
         </nav>
     </header>
+
+    {{#if user}}
+    <script>
+        (function() {
+            let timer = 0;
+
+            if (localStorage.getItem('timer')) {
+                timer = parseInt(localStorage.getItem('timer'), 10);
+            } else {
+                const timerDisplay = document.getElementById('timer_display');
+                if (timerDisplay) {
+                    timer = parseInt(timerDisplay.getAttribute('data-initial-timer'), 10) || 0;
+                } else {
+                    timer = 0;
+                }
+            }
+
+            function updateTimerDisplay() {
+                const timerDisplay = document.getElementById('timer_display');
+                if (timerDisplay) {
+                    timerDisplay.textContent = formatTime(timer);
+                }
+            }
+
+            function formatTime(seconds) {
+                const h = Math.floor(seconds / 3600);
+                const m = Math.floor((seconds % 3600) / 60);
+                const s = seconds % 60;
+                return [h, m, s].map(v => v < 10 ? '0' + v : v).join(':');
+            }
+
+            const timerInterval = setInterval(function() {
+                timer++;
+                localStorage.setItem('timer', timer);
+                updateTimerDisplay();
+            }, 1000);
+
+            updateTimerDisplay();
+
+            const logoutLink = document.getElementById('logout_link');
+            if (logoutLink) {
+                logoutLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    axios.post('/save_timer', { timer: timer })
+                        .then(function(response) {
+                            localStorage.removeItem('timer');
+                            clearInterval(timerInterval);
+                            window.location.href = '/logout';
+                        })
+                        .catch(function(error) {
+                            console.error('Error saving timer:', error);
+                            localStorage.removeItem('timer');
+                            clearInterval(timerInterval);
+                            window.location.href = '/logout';
+                        });
+                });
+            }
+        })();
+    </script>
+    {{/if}}
+</body>
+</html>
