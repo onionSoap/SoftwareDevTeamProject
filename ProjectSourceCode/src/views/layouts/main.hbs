@@ -144,7 +144,6 @@
  
         function pickup(id) {
             hide(id);
-            current_active_item = id;
             axios.patch('/update_item_status', {
                 item_name: id,
                 new_status: 'found'

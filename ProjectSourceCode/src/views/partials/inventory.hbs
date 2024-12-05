@@ -78,7 +78,7 @@
 
       clickedItem.classList.remove('found');
       clickedItem.classList.add('active');
-      const current_active_item = clickedItem.querySelector('img').alt;
+      current_active_item = clickedItem.querySelector('img').alt;
 
       // change item to prevent click
       axios.patch('/update_item_status', {
