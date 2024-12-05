@@ -63,7 +63,7 @@ app.use(
   session({
     secret: "super duper secret!", //TODO: they might want us to put this in an env file, like: process.env.SESSION_SECRET
     saveUninitialized: true,
-    resave: true,
+    resave: false
   })
 );
 app.use(
@@ -155,7 +155,7 @@ app.post('/register', async (req, res) => {
 
 // Authentication Middleware.
 const auth = (req, res, next) => {
-  // console.log(req.session)
+  console.log(req.session)
   if (!req.session.user) {
     // Default to login page.
     return res.redirect('/login');
@@ -206,6 +206,7 @@ app.get('/page1', (req, res) => {
     WHERE users_items.user_id = $1;
   `;
 
+  const userProgress = `SELECT progress FROM users WHERE user = ${req.session.user};`
   db.any(sqlPage1, [user_id])
     .then(sceneData => {
       db.any(sqlItems, [user_id])
@@ -420,6 +421,7 @@ app.post('/update_is_solved', async (req, res) => {
 
       //Update the user's progress:
       const sql_item_update = 'UPDATE users SET progress = $1 WHERE user_id = $2;'; 
+      console.log("increment");
       req.session.user.progress += 1;
       var updated_progress = req.session.user.progress;
 
