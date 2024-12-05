@@ -20,7 +20,7 @@ Instructions on how to run the application locally:
 TODO
 
 How to run the tests:
-TODO
+Change the 'command' in the docker.yaml file to 'npm run testandrun'.
 
 Link to the deployed application:
 https://softwaredevteamproject.onrender.com/
