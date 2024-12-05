@@ -2,4 +2,18 @@
     <footer class="footer">
         <a href="/scoreboard">Scoreboard</a>
     </footer>
+
+    <script>
+        const scoreboardLink = document.getElementById('scoreboard_link');
+        if (scoreboardLink) {
+            scoreboardLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                axios.post('/save_timer', { timer: timer }).then(function(response){
+                    localStorage.removeItem('timer');
+                    clearInterval(timerInterval);
+                    window.location.href = '/scoreboard';
+                })
+            });
+        } 
+    </script>
 </html>
