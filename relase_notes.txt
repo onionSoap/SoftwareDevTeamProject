@@ -76,3 +76,4 @@
             - Sofia implements the 'brew a potion' puzzle. 
             - Sofia adds a glow effect on hover to pickupable items. 
 11/29/2024 : Sofia created a 'complete game' screen and made progress increment while user is playing, so the game can be completed now. 
+12/03/2024 : Sofia fixed the /update_item_status endpoint.
