@@ -36,61 +36,63 @@
 
     {{#if user}}
     <script>
-        (function() {
-            let timer = 0;
+        let timer = 0;
 
-            if (localStorage.getItem('timer')) {
-                timer = parseInt(localStorage.getItem('timer'), 10);
+        if (localStorage.getItem('timer')) {
+            timer = parseInt(localStorage.getItem('timer'), 10);
+        } else {
+            const timerDisplay = document.getElementById('timer_display');
+            if (timerDisplay) {
+                timer = parseInt(timerDisplay.getAttribute('data-initial-timer'), 10) || 0;
             } else {
-                const timerDisplay = document.getElementById('timer_display');
-                if (timerDisplay) {
-                    timer = parseInt(timerDisplay.getAttribute('data-initial-timer'), 10) || 0;
-                } else {
-                    timer = 0;
-                }
+                timer = 0;
             }
+        }
 
-            function updateTimerDisplay() {
-                const timerDisplay = document.getElementById('timer_display');
-                if (timerDisplay) {
-                    timerDisplay.textContent = formatTime(timer);
-                }
+        function updateTimerDisplay() {
+            const timerDisplay = document.getElementById('timer_display');
+            if (timerDisplay) {
+                timerDisplay.textContent = formatTime(timer);
             }
+        }
 
-            function formatTime(seconds) {
-                const h = Math.floor(seconds / 3600);
-                const m = Math.floor((seconds % 3600) / 60);
-                const s = seconds % 60;
-                return [h, m, s].map(v => v < 10 ? '0' + v : v).join(':');
-            }
+        function formatTime(seconds) {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            return [h, m, s].map(v => v < 10 ? '0' + v : v).join(':');
+        }
 
-            const timerInterval = setInterval(function() {
-                timer++;
-                localStorage.setItem('timer', timer);
-                updateTimerDisplay();
-            }, 1000);
-
+        const timerInterval = setInterval(function() {
+            timer++;
+            localStorage.setItem('timer', timer);
             updateTimerDisplay();
+        }, 1000);
 
-            const logoutLink = document.getElementById('logout_link');
-            if (logoutLink) {
-                logoutLink.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    axios.post('/save_timer', { timer: timer })
-                        .then(function(response) {
-                            localStorage.removeItem('timer');
-                            clearInterval(timerInterval);
-                            window.location.href = '/logout';
-                        })
-                        .catch(function(error) {
-                            console.error('Error saving timer:', error);
-                            localStorage.removeItem('timer');
-                            clearInterval(timerInterval);
-                            window.location.href = '/logout';
-                        });
-                });
-            }
-        })();
+        updateTimerDisplay();
+
+        const logoutLink = document.getElementById('logout_link');
+        if (logoutLink) {
+            logoutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                axios.post('/save_timer', { timer: timer }).then(function(response){
+                    localStorage.removeItem('timer');
+                    clearInterval(timerInterval);
+                    window.location.href = '/logout';
+                })
+                    /*.then(function(response) {
+                        localStorage.removeItem('timer');
+                        clearInterval(timerInterval);
+                        window.location.href = '/logout';
+                    })
+                    .catch(function(error) {
+                        console.error('Error saving timer:', error);
+                        localStorage.removeItem('timer');
+                        clearInterval(timerInterval);
+                        window.location.href = '/logout';
+                    });*/
+            });
+        } 
     </script>
     {{/if}}
 </body>
