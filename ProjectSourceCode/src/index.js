@@ -82,7 +82,13 @@ app.get('/', (req, res) => {
 });
   
 app.get('/login', (req, res) => {
-  res.render('pages/login');
+  const message = req.session.message || null;
+  res.render('pages/login', {message: message,error: false});
+});
+//register
+app.get('/register', (req, res) => {
+  const message = req.session.message || null;
+  res.render('pages/register', {message: message, error:true});
 });
 
 app.post('/login', async (req, res) => {
@@ -105,7 +111,8 @@ app.post('/login', async (req, res) => {
         res.render('pages/login', { message: "Incorrect username or password.", error: true });
       }
     } else {
-      res.render('pages/login', { message: "Incorrect username or password.", error: true });
+      req.session.message = "No account found with that username. Try registering!"
+      res.redirect('/register');
     }
   } catch (error) {
     console.error('Login Error:', error);
@@ -113,10 +120,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-//register
-app.get('/register', (req, res) => {
-  res.render('pages/register');
-});
 
 //from lab 8
 app.post('/register', async (req, res) => {
@@ -144,7 +147,9 @@ app.post('/register', async (req, res) => {
     // console.log("Users_Items: ", temp_ui);
     const temp_ss = await db.any(sqlSceneState, [temp_user.user_id]);
     //console.log("Scene_state for new user: ", temp_ss);
-    res.status(200).render('pages/register', {message: "Registration Successful!"});
+    req.session.message = "Registration Successful!"
+    res.redirect('/login');
+    //res.status(200).render('pages/register', {message: "Registration Successful!"});
   }
   catch(error) {
     // console.log("in catch")
