@@ -76,4 +76,20 @@
             - Sofia implements the 'brew a potion' puzzle. 
             - Sofia adds a glow effect on hover to pickupable items. 
 11/29/2024 : Sofia created a 'complete game' screen and made progress increment while user is playing, so the game can be completed now. 
-12/03/2024 : Sofia fixed the /update_item_status endpoint.
+12/02/2024 : 
+            - Emily finished database integration for gameplay mechanics (visibility).
+            - Emily updated registration post to include the new user-specific scene_states.
+12/03/2024 : 
+            - Sofia fixed the /update_item_status endpoint.
+            - Emily updated the scoreboard to load from the database.
+            - Emily maintained logged in user's information on scoreboard page.
+12/04/2024 :
+            - Sofia updated "README" file for running tests.
+            - Dorjee finished invenotry implementation with the database.
+            - Sofia fixed gameplay bugs.
+12/05/2024 : 
+            - Sofia fixed more gameplay bugs.
+            - Emily fixed registration and login reroutes.
+            - Emily updated the end game image.
+            - Sofia implemented scoreboard screen saving gameplay time.
+            - Sofia fixed snowflakes being at the back of the screen.
