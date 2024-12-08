@@ -79,13 +79,15 @@
 12/02/2024 : 
             - Emily finished database integration for gameplay mechanics (visibility).
             - Emily updated registration post to include the new user-specific scene_states.
+            - Dorjee implements the inventory dynamically accessing items & their statuses from the database.
+            - Dorjee implements the inventory reflecting what items are clicked on in the database. 
 12/03/2024 : 
             - Sofia fixed the /update_item_status endpoint.
             - Emily updated the scoreboard to load from the database.
             - Emily maintained logged in user's information on scoreboard page.
 12/04/2024 :
             - Sofia updated "README" file for running tests.
-            - Dorjee finished invenotry implementation with the database.
+            - Dorjee finished inventory implementation with the database, fixed a bug where disabled items could be clicked.
             - Sofia fixed gameplay bugs.
 12/05/2024 : 
             - Sofia fixed more gameplay bugs.
